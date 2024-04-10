@@ -19,8 +19,6 @@ namespace Myd.Platform
         [SerializeField]
         private ParticleSystem vfxDashLine;
         [SerializeField]
-        private RippleEffect vfxRippleEffect;
-        [SerializeField]
         private GameObject vfxSpeedRing;
 
         public void Awake()
@@ -86,11 +84,6 @@ namespace Myd.Platform
             vfxDashLine.transform.position = position;
             vfxDashLine.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
             vfxDashLine.GetComponent<ParticleSystem>().Play();
-        }
-
-        public void Ripple(Vector3 position)
-        {
-            vfxRippleEffect.Ripple(position);
         }
 
         public void CameraShake(Vector2 dir)

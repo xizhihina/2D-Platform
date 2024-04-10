@@ -74,7 +74,6 @@ namespace Myd.Platform
         public void PlayDashEffect(Vector3 position, Vector2 dir)
         {
             //EffectControl.DashLine(position, dir);
-            EffectControl.Ripple(position);
             EffectControl.CameraShake(dir);
         }
 
