@@ -1,10 +1,5 @@
-﻿using Myd.Common;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Myd.Platform
@@ -28,7 +23,7 @@ namespace Myd.Platform
         public override void OnBegin()
         {
             ctx.Speed.x = 0;
-            ctx.Speed.y *= Constants.ClimbGrabYMult;
+            ctx.Speed.y *= Constants.ClimbGrabYMulti;
             //TODO 其他参数
             ctx.WallSlideTimer = Constants.WallSlideTime;
             ctx.WallBoost?.ResetTime();
@@ -59,7 +54,7 @@ namespace Myd.Platform
             }
             if (ctx.CanDash)
             {
-                return this.ctx.Dash();
+                return ctx.Dash();
             }
             //放开抓取键,则回到Normal状态
             if (!GameInput.Grab.Checked())
@@ -99,7 +94,8 @@ namespace Myd.Platform
                     {
                         //trySlip = true;
                     }
-                    else if (ctx.MoveY == 1)
+
+                    if (ctx.MoveY == 1)
                     {
                         //往上爬
                         target = Constants.ClimbUpSpeed;

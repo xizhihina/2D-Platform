@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Myd.Platform
+﻿namespace Myd.Platform
 {
     //这里涉及坐标的数值需要/10, 除时间类型
     public static class Constants
@@ -25,7 +19,7 @@ namespace Myd.Platform
         //Hold情况下的最大移动速度
         public static float HoldingMaxRun = 7f;
         //空气阻力
-        public static float AirMult = 0.65f;
+        public static float AirMulti = 0.65f;
         //移动加速度
         public static float RunAccel = 100f;
         //移动减速度
@@ -62,7 +56,7 @@ namespace Myd.Platform
         #region Dash相关参数
         public static float DashSpeed = 24f;           //冲刺速度
         public static float EndDashSpeed = 16f;        //结束冲刺速度
-        public static float EndDashUpMult = .75f;       //如果向上冲刺，阻力。
+        public static float EndDashUpMulti = .75f;       //如果向上冲刺，阻力。
         public static float DashTime = .15f;            //冲刺时间
         public static float DashCooldown = .2f;         //冲刺冷却时间，
         public static float DashRefillCooldown = .1f;   //冲刺重新装填时间
@@ -86,7 +80,7 @@ namespace Myd.Platform
         public static float ClimbDownSpeed = -8f;       //下爬速度
         public static float ClimbSlipSpeed = -3f;       //下滑速度
         public static float ClimbAccel = 90f;           //下滑加速度
-        public static float ClimbGrabYMult = .2f;       //攀爬时抓取导致的Y轴速度衰减
+        public static float ClimbGrabYMulti = .2f;       //攀爬时抓取导致的Y轴速度衰减
         public static float ClimbHopY = 12f;            //Hop的Y轴速度
         public static float ClimbHopX = 10f;            //Hop的X轴速度
         public static float ClimbHopForceTime = .2f;    //Hop时间
@@ -96,8 +90,8 @@ namespace Myd.Platform
 
         #region Duck参数
         public static float DuckFriction = 50f;
-        public static float DuckSuperJumpXMult = 1.25f;
-        public static float DuckSuperJumpYMult = .5f;
+        public static float DuckSuperJumpXMulti = 1.25f;
+        public static float DuckSuperJumpYMulti = .5f;
         #endregion
 
         #region Corner Correct

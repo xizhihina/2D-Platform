@@ -61,7 +61,7 @@ namespace Myd.Platform
 
         public void PlayWallSlideEffect(Vector2 dir)
         {
-            Vector2 origion = this.Position + Vector2.up * -0.5f;
+            Vector2 origion = Position + Vector2.up * -0.5f;
             RaycastHit2D hit = Physics2D.Raycast(origion, dir, 0.5f, GroundMask);
             Color color = Color.white;
             if (hit && hit.collider)
@@ -140,7 +140,7 @@ namespace Myd.Platform
             }
             else
             {
-                if (this.OnGround && MoveY != 1)
+                if (OnGround && MoveY != 1)
                 {
                     SpriteControl.Scale(new Vector2(.8f, 1.2f));
                 }
@@ -148,9 +148,9 @@ namespace Myd.Platform
             }
         }
 
-        public Vector3 SpritePosition { get => this.SpriteControl.SpritePosition; }
-        public Vector2 LeftPosition { get => this.Position + Vector2.left * 0.6f; }
-        public Vector2 RightPosition { get => this.Position + Vector2.right * 0.6f; }
+        public Vector3 SpritePosition { get => SpriteControl.SpritePosition; }
+        public Vector2 LeftPosition { get => Position + Vector2.left * 0.6f; }
+        public Vector2 RightPosition { get => Position + Vector2.right * 0.6f; }
     }
 
 

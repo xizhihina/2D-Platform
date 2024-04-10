@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Myd.Platform
@@ -71,7 +67,8 @@ namespace Myd.Platform
                         ctx.SuperWallJump(-1);
                         return EActionState.Normal;
                     }
-                    else if (ctx.WallJumpCheck(-1))
+
+                    if (ctx.WallJumpCheck(-1))
                     {
                         ctx.SuperWallJump(1);
                         return EActionState.Normal;
@@ -88,7 +85,8 @@ namespace Myd.Platform
                         ctx.WallJump(-1);
                         return EActionState.Normal;
                     }
-                    else if (ctx.WallJumpCheck(-1))
+
+                    if (ctx.WallJumpCheck(-1))
                     {
                         ctx.WallJump(1);
                         return EActionState.Normal;
@@ -125,16 +123,16 @@ namespace Myd.Platform
 
             ctx.SpriteControl.Slash(false);
             ctx.PlayTrailEffect((int)ctx.Facing);
-            if (this.DashDir.y >= 0)
+            if (DashDir.y >= 0)
             {
                 ctx.Speed = DashDir * Constants.EndDashSpeed;
                 //ctx.Speed.x *= swapCancel.X;
                 //ctx.Speed.y *= swapCancel.Y;
             }
             if (ctx.Speed.y > 0)
-                ctx.Speed.y *= Constants.EndDashUpMult;
+                ctx.Speed.y *= Constants.EndDashUpMulti;
 
-            this.ctx.SetState((int)EActionState.Normal);
+            ctx.SetState((int)EActionState.Normal);
         }
 
         public override bool IsCoroutine()

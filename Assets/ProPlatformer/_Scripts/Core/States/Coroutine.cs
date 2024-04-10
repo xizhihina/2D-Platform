@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Myd.Platform
 {
@@ -13,54 +9,53 @@ namespace Myd.Platform
 		public bool Active { get; set; }
 		public Coroutine(IEnumerator functionCall, bool removeOnComplete = true)
 		{
-			this.enumerators = new Stack<IEnumerator>();
-			this.enumerators.Push(functionCall);
-			this.Active = true;
-			this.RemoveOnComplete = removeOnComplete;
+			enumerators = new Stack<IEnumerator>();
+			enumerators.Push(functionCall);
+			Active = true;
+			RemoveOnComplete = removeOnComplete;
 		}
 
 		public Coroutine(bool removeOnComplete = true)
 		{
-			this.RemoveOnComplete = removeOnComplete;
-			this.enumerators = new Stack<IEnumerator>();
-			this.Active = false;
+			RemoveOnComplete = removeOnComplete;
+			enumerators = new Stack<IEnumerator>();
+			Active = false;
 		}
 
 		public void Update(float deltaTime)
 		{
-			this.ended = false;
-			if (this.waitTimer > 0f)
+			ended = false;
+			if (waitTimer > 0f)
 			{
-				this.waitTimer -= deltaTime;
+				waitTimer -= deltaTime;
 				return;
 			}
-			if (this.enumerators.Count > 0)
+			if (enumerators.Count > 0)
 			{
-				IEnumerator enumerator = this.enumerators.Peek();
-				if (enumerator.MoveNext() && !this.ended)
+				IEnumerator enumerator = enumerators.Peek();
+				if (enumerator.MoveNext() && !ended)
 				{
 					if (enumerator.Current is int)
 					{
-						this.waitTimer = (float)((int)enumerator.Current);
+						waitTimer = (int)enumerator.Current;
 					}
 					if (enumerator.Current is float)
 					{
-						this.waitTimer = (float)enumerator.Current;
+						waitTimer = (float)enumerator.Current;
 						return;
 					}
 					if (enumerator.Current is IEnumerator)
 					{
-						this.enumerators.Push(enumerator.Current as IEnumerator);
-						return;
+						enumerators.Push(enumerator.Current as IEnumerator);
 					}
 				}
-				else if (!this.ended)
+				else if (!ended)
 				{
-					this.enumerators.Pop();
-					if (this.enumerators.Count == 0)
+					enumerators.Pop();
+					if (enumerators.Count == 0)
 					{
-						this.Active = false;
-						this.Finished = true;
+						Active = false;
+						Finished = true;
 					}
 				}
 			}
@@ -68,21 +63,21 @@ namespace Myd.Platform
 
 		public void Cancel()
 		{
-			this.Active = false;
-			this.Finished = true;
-			this.waitTimer = 0f;
-			this.enumerators.Clear();
-			this.ended = true;
+			Active = false;
+			Finished = true;
+			waitTimer = 0f;
+			enumerators.Clear();
+			ended = true;
 		}
 
 		public void Replace(IEnumerator functionCall)
 		{
-			this.Active = true;
-			this.Finished = false;
-			this.waitTimer = 0f;
-			this.enumerators.Clear();
-			this.enumerators.Push(functionCall);
-			this.ended = true;
+			Active = true;
+			Finished = false;
+			waitTimer = 0f;
+			enumerators.Clear();
+			enumerators.Push(functionCall);
+			ended = true;
 		}
 
 		public bool RemoveOnComplete = true;

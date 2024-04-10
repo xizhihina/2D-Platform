@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace Myd.Platform
+﻿namespace Myd.Platform
 {
     /// <summary>
     /// 特效接口

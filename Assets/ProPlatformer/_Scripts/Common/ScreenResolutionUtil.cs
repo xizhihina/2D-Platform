@@ -15,11 +15,9 @@ namespace Myd.Common
             {
                 return ScreenH / 100.0f / 2f;
             }
-            else
-            {
-                //优先满足宽度可见
-                return ScreenW * (Screen.height * 1.0f) / (Screen.width * 1.0f) / 100.0f / 2f;
-            }
+
+            //优先满足宽度可见
+            return ScreenW * (Screen.height * 1.0f) / (Screen.width * 1.0f) / 100.0f / 2f;
         }
     }
 }

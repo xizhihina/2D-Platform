@@ -1,7 +1,4 @@
-﻿
-
-using Myd.Platform.Core;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -21,7 +18,7 @@ namespace Myd.Platform
             var target = CameraTarget;
             var multiplier = 1f;
 
-            cameraPosition = from + (target - from) * (1f - (float)Mathf.Pow(0.01f / multiplier, deltaTime));
+            cameraPosition = from + (target - from) * (1f - Mathf.Pow(0.01f / multiplier, deltaTime));
         }
 
         public Vector2 GetCameraPosition() 
@@ -34,7 +31,7 @@ namespace Myd.Platform
             get
             {
                 Vector2 at = new Vector2();
-                Vector2 target = new Vector2(this.Position.x, this.Position.y);
+                Vector2 target = new Vector2(Position.x, Position.y);
 
                 at.x = Mathf.Clamp(target.x, bounds.min.x + 3200 / 100 / 2f, bounds.max.x - 3200 / 100 / 2f);
                 at.y = Mathf.Clamp(target.y, bounds.min.y + 1800 / 100 / 2f, bounds.max.y - 1800 / 100 / 2f);

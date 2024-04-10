@@ -1,6 +1,5 @@
-﻿using Myd.Common;
-using Myd.Platform.Core;
-using System;
+﻿using System;
+using Myd.Common;
 using UnityEngine;
 
 namespace Myd.Platform
@@ -50,54 +49,52 @@ namespace Myd.Platform
         public WallBoost WallBoost { get; set; }    //WallBoost
         private FiniteStateMachine<BaseActionState> stateMachine;
 
-        public ISpriteControl SpriteControl { get; private set; }
+        public PlayerRenderer SpriteControl { get; private set; }
         //特效控制器
-        public IEffectControl EffectControl { get; private set; } 
-        //音效控制器
-        public ISoundControl SoundControl { get; private set; }
-        public ICamera camera { get; private set; }
-        public PlayerController(ISpriteControl spriteControl, IEffectControl effectControl)
+        public SceneEffectManager EffectControl { get; private set; } 
+        public SceneCamera camera { get; private set; }
+        public PlayerController(PlayerRenderer spriteControl, SceneEffectManager effectControl)
         {
-            this.SpriteControl = spriteControl;
-            this.EffectControl = effectControl;
+            SpriteControl = spriteControl;
+            EffectControl = effectControl;
 
-            this.stateMachine = new FiniteStateMachine<BaseActionState>((int)EActionState.Size);
-            this.stateMachine.AddState(new NormalState(this));
-            this.stateMachine.AddState(new DashState(this));
-            this.stateMachine.AddState(new ClimbState(this));
-            this.GroundMask = LayerMask.GetMask("Ground");
+            stateMachine = new FiniteStateMachine<BaseActionState>((int)EActionState.Size);
+            stateMachine.AddState(new NormalState(this));
+            stateMachine.AddState(new DashState(this));
+            stateMachine.AddState(new ClimbState(this));
+            GroundMask = LayerMask.GetMask("Ground");
 
-            this.Facing  = Facings.Right;
-            this.LastAim = Vector2.right;
+            Facing  = Facings.Right;
+            LastAim = Vector2.right;
         }
 
         public void RefreshAbility()
         {
 
-            this.JumpCheck = new JumpCheck(this, Constants.EnableJumpGrace);
+            JumpCheck = new JumpCheck(this, Constants.EnableJumpGrace);
 
             if (!Constants.EnableWallBoost)
             {
-                this.WallBoost = null;
+                WallBoost = null;
             }
             else
             {
-                this.WallBoost = this.WallBoost == null ? new WallBoost(this) : this.WallBoost;
+                WallBoost = WallBoost == null ? new WallBoost(this) : WallBoost;
             }
         }
 
         public void Init(Bounds bounds, Vector2 startPosition)
         {
             //根据进入的方式,决定初始状态
-            this.stateMachine.State = (int)EActionState.Normal;
-            this.lastDashes = this.dashes = 1;
-            this.Position = startPosition;
-            this.collider = normalHitbox;
+            stateMachine.State = (int)EActionState.Normal;
+            lastDashes = dashes = 1;
+            Position = startPosition;
+            collider = normalHitbox;
 
-            this.SpriteControl.SetSpriteScale(NORMAL_SPRITE_SCALE);
+            SpriteControl.SetSpriteScale(NORMAL_SPRITE_SCALE);
 
             this.bounds = bounds;
-            this.cameraPosition = CameraTarget;
+            cameraPosition = CameraTarget;
             //TODO 初始化尾巴颜色
             //Color color = NormalHairColor;
             //Gradient gradient = new Gradient();
@@ -118,28 +115,28 @@ namespace Myd.Platform
                 wasOnGround = onGround;
                 if (Speed.y <= 0)
                 {
-                    this.onGround = CheckGround();//碰撞检测地面
+                    onGround = CheckGround();//碰撞检测地面
                 }
                 else
                 {
-                    this.onGround = false;
+                    onGround = false;
                 }
 
                 //Wall Slide
-                if (this.WallSlideDir != 0)
+                if (WallSlideDir != 0)
                 {
-                    this.WallSlideTimer = Math.Max(this.WallSlideTimer - deltaTime, 0);
-                    this.WallSlideDir = 0;
+                    WallSlideTimer = Math.Max(WallSlideTimer - deltaTime, 0);
+                    WallSlideDir = 0;
                 }
-                if (this.onGround && this.stateMachine.State != (int)EActionState.Climb)
+                if (onGround && stateMachine.State != (int)EActionState.Climb)
                 {
-                    this.WallSlideTimer = Constants.WallSlideTime;
+                    WallSlideTimer = Constants.WallSlideTime;
                 }
                 //Wall Boost, 不消耗体力WallJump
-                this.WallBoost?.Update(deltaTime);
+                WallBoost?.Update(deltaTime);
                 
                 //跳跃检查
-                this.JumpCheck?.Update(deltaTime);
+                JumpCheck?.Update(deltaTime);
 
                 //Dash
                 {
@@ -165,16 +162,16 @@ namespace Myd.Platform
                 if (ForceMoveXTimer > 0)
                 {
                     ForceMoveXTimer -= deltaTime;
-                    this.moveX = ForceMoveX;
+                    moveX = ForceMoveX;
                 }
                 else
                 {
                     //输入
-                    this.moveX = Math.Sign(UnityEngine.Input.GetAxisRaw("Horizontal"));
+                    moveX = Math.Sign(Input.GetAxisRaw("Horizontal"));
                 }
 
                 //Facing
-                if (moveX != 0 && this.stateMachine.State != (int)EActionState.Climb)
+                if (moveX != 0 && stateMachine.State != (int)EActionState.Climb)
                 {
                     Facing = (Facings)moveX;
                 }
@@ -196,14 +193,14 @@ namespace Myd.Platform
                 }
 
                 //Hop Wait X
-                if (this.HopWaitX != 0)
+                if (HopWaitX != 0)
                 {
                     if (Math.Sign(Speed.x) == -HopWaitX || Speed.y < 0)
-                        this.HopWaitX = 0;
-                    else if (!CollideCheck(Position, Vector2.right * this.HopWaitX))
+                        HopWaitX = 0;
+                    else if (!CollideCheck(Position, Vector2.right * HopWaitX))
                     {
-                        Speed.x = this.HopWaitXSpeed;
-                        this.HopWaitX = 0;
+                        Speed.x = HopWaitXSpeed;
+                        HopWaitX = 0;
                     }
                 }
 
@@ -225,7 +222,7 @@ namespace Myd.Platform
                         }
                         else if (Calc.OnInterval(launchedTimer, was, 0.15f))
                         {
-                            EffectControl.SpeedRing(this.Position, this.Speed.normalized);
+                            EffectControl.SpeedRing(Position, Speed.normalized);
                         }
                     }
                 }
@@ -249,16 +246,16 @@ namespace Myd.Platform
         public void Jump()
         {
             GameInput.Jump.ConsumeBuffer();
-            this.JumpCheck?.ResetTime();
-            this.WallSlideTimer = Constants.WallSlideTime;
-            this.WallBoost?.ResetTime();
-            this.varJumpTimer = Constants.VarJumpTime;
-            this.Speed.x += Constants.JumpHBoost * moveX;
-            this.Speed.y = Constants.JumpSpeed;
+            JumpCheck?.ResetTime();
+            WallSlideTimer = Constants.WallSlideTime;
+            WallBoost?.ResetTime();
+            varJumpTimer = Constants.VarJumpTime;
+            Speed.x += Constants.JumpHBoost * moveX;
+            Speed.y = Constants.JumpSpeed;
             //Speed += LiftBoost;
-            this.varJumpSpeed = this.Speed.y;
+            varJumpSpeed = Speed.y;
             
-            this.PlayJumpEffect(SpritePosition, Vector2.up);
+            PlayJumpEffect(SpritePosition, Vector2.up);
         }
 
         //SuperJump，表示在地面上或者土狼时间内，Dash接跳跃。
@@ -268,26 +265,26 @@ namespace Myd.Platform
         public void SuperJump()
         {
             GameInput.Jump.ConsumeBuffer();
-            this.JumpCheck?.ResetTime();
+            JumpCheck?.ResetTime();
             varJumpTimer = Constants.VarJumpTime;
-            this.WallSlideTimer = Constants.WallSlideTime;
-            this.WallBoost?.ResetTime();
+            WallSlideTimer = Constants.WallSlideTime;
+            WallBoost?.ResetTime();
 
-            this.Speed.x = Constants.SuperJumpH * (int)Facing;
-            this.Speed.y = Constants.JumpSpeed;
+            Speed.x = Constants.SuperJumpH * (int)Facing;
+            Speed.y = Constants.JumpSpeed;
             //Speed += LiftBoost;
             if (Ducking)
             {
                 Ducking = false;
-                this.Speed.x *= Constants.DuckSuperJumpXMult;
-                this.Speed.y *= Constants.DuckSuperJumpYMult;
+                Speed.x *= Constants.DuckSuperJumpXMulti;
+                Speed.y *= Constants.DuckSuperJumpYMulti;
             }
 
             varJumpSpeed = Speed.y;
             //TODO 
             launched = true;
 
-            this.PlayJumpEffect(this.SpritePosition, Vector2.up);
+            PlayJumpEffect(SpritePosition, Vector2.up);
         }
 
         //在墙边情况下的，跳跃。主要需要考虑当前跳跃朝向
@@ -295,14 +292,14 @@ namespace Myd.Platform
         {
             GameInput.Jump.ConsumeBuffer();
             Ducking = false;
-            this.JumpCheck?.ResetTime();
+            JumpCheck?.ResetTime();
             varJumpTimer = Constants.VarJumpTime;
-            this.WallSlideTimer = Constants.WallSlideTime;
-            this.WallBoost?.ResetTime();
+            WallSlideTimer = Constants.WallSlideTime;
+            WallBoost?.ResetTime();
             if (moveX != 0)
             {
-                this.ForceMoveX = dir;
-                this.ForceMoveXTimer = Constants.WallJumpForceTime;
+                ForceMoveX = dir;
+                ForceMoveXTimer = Constants.WallJumpForceTime;
             }
 
             Speed.x = Constants.WallJumpHSpeed * dir;
@@ -313,9 +310,9 @@ namespace Myd.Platform
 
             //墙壁粒子效果。
             if (dir == -1)
-                this.PlayJumpEffect(this.RightPosition, Vector2.left);
+                PlayJumpEffect(RightPosition, Vector2.left);
             else
-                this.PlayJumpEffect(this.LeftPosition, Vector2.right);
+                PlayJumpEffect(LeftPosition, Vector2.right);
             
         }
 
@@ -337,10 +334,10 @@ namespace Myd.Platform
         {
             GameInput.Jump.ConsumeBuffer();
             Ducking = false;
-            this.JumpCheck?.ResetTime();
+            JumpCheck?.ResetTime();
             varJumpTimer = Constants.SuperWallJumpVarTime;
-            this.WallSlideTimer = Constants.WallSlideTime;
-            this.WallBoost?.ResetTime();
+            WallSlideTimer = Constants.WallSlideTime;
+            WallBoost?.ResetTime();
 
             Speed.x = Constants.SuperWallJumpH * dir;
             Speed.y = Constants.SuperWallJumpSpeed;
@@ -349,20 +346,20 @@ namespace Myd.Platform
             launched = true;
 
             if (dir == -1)
-                this.PlayJumpEffect(this.RightPosition, Vector2.left);
+                PlayJumpEffect(RightPosition, Vector2.left);
             else
-                this.PlayJumpEffect(this.LeftPosition, Vector2.right);
+                PlayJumpEffect(LeftPosition, Vector2.right);
         }
 
         public bool RefillDash()
         {
-            if (this.dashes < Constants.MaxDashes)
+            if (dashes < Constants.MaxDashes)
             {
-                this.dashes = Constants.MaxDashes;
+                dashes = Constants.MaxDashes;
                 return true;
             }
-            else
-                return false;
+
+            return false;
         }
 
         
@@ -372,41 +369,41 @@ namespace Myd.Platform
         {
             get
             {
-                return GameInput.Dash.Pressed() && dashCooldownTimer <= 0 && this.dashes > 0;
+                return GameInput.Dash.Pressed() && dashCooldownTimer <= 0 && dashes > 0;
             }
         }
 
         public float WallSpeedRetentionTimer
         {
-            get { return this.wallSpeedRetentionTimer; }
-            set { this.wallSpeedRetentionTimer = value; }
+            get { return wallSpeedRetentionTimer; }
+            set { wallSpeedRetentionTimer = value; }
         }
         public Vector2 Speed;
 
         public object Holding => null;
 
-        public bool OnGround => this.onGround;
+        public bool OnGround => onGround;
         private Color groundColor = Color.white;
-        public Color GroundColor => this.groundColor;
+        public Color GroundColor => groundColor;
         public Vector2 Position { get; private set; }
         //表示进入爬墙状态有0.1秒时间,不发生移动，为了让玩家看清发生了爬墙的动作
         public float ClimbNoMoveTimer { get; set; }
-        public float VarJumpSpeed => this.varJumpSpeed;
+        public float VarJumpSpeed => varJumpSpeed;
 
         public float VarJumpTimer
         {
             get
             {
-                return this.varJumpTimer;
+                return varJumpTimer;
             }
             set
             {
-                this.varJumpTimer = value;
+                varJumpTimer = value;
             }
         }
 
         public int MoveX => moveX;
-        public int MoveY => Math.Sign(UnityEngine.Input.GetAxisRaw("Vertical"));
+        public int MoveY => Math.Sign(Input.GetAxisRaw("Vertical"));
 
         public float MaxFall { get => maxFall; set => maxFall = value; }
         public float DashCooldownTimer { get => dashCooldownTimer; set => dashCooldownTimer = value; }
@@ -416,32 +413,30 @@ namespace Myd.Platform
         public EActionState Dash()
         {
             //wasDashB = Dashes == 2;
-            this.dashes = Math.Max(0, this.dashes - 1);
+            dashes = Math.Max(0, dashes - 1);
             GameInput.Dash.ConsumeBuffer();
             return EActionState.Dash;
         }
         public void SetState(int state)
         {
-            this.stateMachine.State = state;
+            stateMachine.State = state;
         }
 
         public bool Ducking
         {
             get
             {
-                return this.collider == this.duckHitbox || this.collider == this.duckHurtbox;
+                return collider == duckHitbox || collider == duckHurtbox;
             }
             set
             {
                 if (value)
                 {
-                    this.collider = this.duckHitbox;
+                    collider = duckHitbox;
                     return;
                 }
-                else
-                {
-                    this.collider = this.normalHitbox;
-                }
+
+                collider = normalHitbox;
                 PlayDuck(value);
             }
         }
@@ -453,10 +448,10 @@ namespace Myd.Platform
             {
                 if (!Ducking)
                     return true;
-                Rect lastCollider = this.collider;
-                this.collider = normalHitbox;
-                bool noCollide = !CollideCheck(this.Position, Vector2.zero);
-                this.collider = lastCollider;
+                Rect lastCollider = collider;
+                collider = normalHitbox;
+                bool noCollide = !CollideCheck(Position, Vector2.zero);
+                collider = lastCollider;
                 return noCollide;
             }
         }
@@ -464,14 +459,14 @@ namespace Myd.Platform
         public bool DuckFreeAt(Vector2 at)
         {
             Vector2 oldP = Position;
-            Rect oldC = this.collider;
+            Rect oldC = collider;
             Position = at;
-            this.collider = duckHitbox;
+            collider = duckHitbox;
 
-            bool ret = !CollideCheck(this.Position, Vector2.zero);
+            bool ret = !CollideCheck(Position, Vector2.zero);
 
-            this.Position = oldP;
-            this.collider = oldC;
+            Position = oldP;
+            collider = oldC;
 
             return ret;
         }
@@ -479,7 +474,7 @@ namespace Myd.Platform
         {
             get
             {
-                return !this.wasOnGround && this.OnGround;
+                return !wasOnGround && OnGround;
             }
         }
     }

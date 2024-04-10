@@ -1,6 +1,4 @@
-﻿
-using Myd.Common;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -33,7 +31,7 @@ namespace Myd.Platform
         {
             if (EnableTrailEffect)
             {
-                this.trailEffect.transform.position = HeadMount.transform.position;
+                trailEffect.transform.position = HeadMount.transform.position;
             }
         }
 

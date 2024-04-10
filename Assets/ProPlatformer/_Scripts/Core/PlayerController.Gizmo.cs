@@ -24,7 +24,7 @@ namespace Myd.Platform
             int direct = Facing == Facings.Right ? 1 : -1;
             {
                 Gizmos.color = Color.blue;
-                Vector2 origin = this.Position + collider.position + Vector2.up * collider.size.y / 2f + Vector2.right * direct * (collider.size.x / 2f + STEP);
+                Vector2 origin = Position + collider.position + Vector2.up * collider.size.y / 2f + Vector2.right * direct * (collider.size.x / 2f + STEP);
                 Vector2 point1 = origin + Vector2.up * (-0.4f + 0.1f);
                 Gizmos.DrawWireSphere(point1, 0.1f);
 

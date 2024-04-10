@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -12,6 +10,7 @@ namespace Myd.Platform
 
         public Vector2 StartPosition;
 
+        //脚本附件的物体背选择时调用，仅在编辑器中可见，游戏运行时不会调用
         public void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;

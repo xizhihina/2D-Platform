@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Myd.Platform
 {
@@ -55,14 +55,14 @@ namespace Myd.Platform
         [Tooltip("结束冲刺后速度")]
         public float EndDashSpeed = 16f;        //结束冲刺速度
         [Tooltip("Y轴向上冲刺的衰减系数")]
-        public float EndDashUpMult = .75f;       //如果向上冲刺，阻力。
+        public float EndDashUpMulti = .75f;       //如果向上冲刺，阻力。
         [Tooltip("冲刺时间")]
         public float DashTime = .15f;            //冲刺时间
         [Tooltip("冲刺冷却时间")]
         public float DashCooldown = .2f;         //冲刺冷却时间，
         [Tooltip("冲刺重新装填时间")]
         public float DashRefillCooldown = .1f;   //冲刺重新装填时间
-        [Tooltip("Dashs水平或者竖直方向位置校正的像素值")]
+        [Tooltip("Dash水平或者竖直方向位置校正的像素值")]
         public int DashCornerCorrection = 4;     //Dash时，遇到阻挡物的可纠正距离，单位0.1米
         [Tooltip("最大Dash次数")]
         public int MaxDashes = 1;    // 最大Dash次数
@@ -84,7 +84,7 @@ namespace Myd.Platform
         [Tooltip("攀爬下滑加速度")]
         public float ClimbAccel = 90f;          //下滑加速度
         [Tooltip("攀爬开始时，对原Y轴速度的衰减")]
-        public float ClimbGrabYMult = .2f;       //攀爬时抓取导致的Y轴速度衰减
+        public float ClimbGrabYMulti = .2f;       //攀爬时抓取导致的Y轴速度衰减
 
         [Header("Hop参数（边缘登陆）")]
         [Tooltip("Hop的Y轴速度")]
@@ -99,13 +99,13 @@ namespace Myd.Platform
         public float ClimbHopNoWindTime = .3f;   //Wind情况下,Hop会无风0.3秒
 
         public float DuckFriction = 50f;
-        public float DuckSuperJumpXMult = 1.25f;
-        public float DuckSuperJumpYMult = 0.5f;
+        public float DuckSuperJumpXMulti = 1.25f;
+        public float DuckSuperJumpYMulti = 0.5f;
 
         private Action reloadCallback;
         public void SetReloadCallback(Action onReload)
         {
-            this.reloadCallback = onReload;
+            reloadCallback = onReload;
         }
 
         public void OnValidate()
@@ -134,7 +134,7 @@ namespace Myd.Platform
 
             Constants.DashSpeed = DashSpeed;          //冲刺速度
             Constants.EndDashSpeed = EndDashSpeed;        //结束冲刺速度
-            Constants.EndDashUpMult = EndDashUpMult;       //如果向上冲刺，阻力。
+            Constants.EndDashUpMulti = EndDashUpMulti;       //如果向上冲刺，阻力。
             Constants.DashTime = DashTime;            //冲刺时间
             Constants.DashCooldown = DashCooldown;         //冲刺冷却时间，
             Constants.DashRefillCooldown = DashRefillCooldown;   //冲刺重新装填时间
@@ -148,7 +148,7 @@ namespace Myd.Platform
             Constants.ClimbDownSpeed = ClimbDownSpeed;       //下爬速度
             Constants.ClimbSlipSpeed = ClimbSlipSpeed;       //下滑速度
             Constants.ClimbAccel = ClimbAccel;          //下滑加速度
-            Constants.ClimbGrabYMult = ClimbGrabYMult;       //攀爬时抓取导致的Y轴速度衰减
+            Constants.ClimbGrabYMulti = ClimbGrabYMulti;       //攀爬时抓取导致的Y轴速度衰减
             Constants.ClimbHopY = ClimbHopY;          //Hop的Y轴速度 
             Constants.ClimbHopX = ClimbHopX;           //Hop的X轴速度
             Constants.ClimbHopForceTime = ClimbHopForceTime;    //Hop时间
@@ -159,15 +159,15 @@ namespace Myd.Platform
             Constants.SuperJumpSpeed = JumpSpeed;
             Constants.SuperWallJumpH = MaxRun + JumpHBoost * 2;
 
-            Constants.DashCornerCorrection = this.DashCornerCorrection;
+            Constants.DashCornerCorrection = DashCornerCorrection;
 
             Constants.DuckFriction = DuckFriction;
-            Constants.DuckSuperJumpXMult = DuckSuperJumpXMult;
-            Constants.DuckSuperJumpYMult = DuckSuperJumpYMult;
+            Constants.DuckSuperJumpXMulti = DuckSuperJumpXMulti;
+            Constants.DuckSuperJumpYMulti = DuckSuperJumpYMulti;
 
-            Constants.EnableWallSlide = this.EnableWallSlide; //启用墙壁下滑功能
-            Constants.EnableJumpGrace = this.EnableJumpGrace; //土狼时间
-            Constants.EnableWallBoost = this.EnableWallBoost; //WallBoost
+            Constants.EnableWallSlide = EnableWallSlide; //启用墙壁下滑功能
+            Constants.EnableJumpGrace = EnableJumpGrace; //土狼时间
+            Constants.EnableWallBoost = EnableWallBoost; //WallBoost
 
             reloadCallback?.Invoke();
         }

@@ -1,12 +1,8 @@
-﻿using Myd.Common;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
+﻿using System.Collections;
+using Myd.Common;
+/*
+ * 有限状态机
+ */
 namespace Myd.Platform
 {
     public enum EActionState
@@ -16,7 +12,16 @@ namespace Myd.Platform
         Climb,
         Size,
     }
-
+    /// <summary>
+    /// 状态基类
+    /// 定义了一个抽象类BaseActionState，它包含了状态机中每个状态的基本信息和行为。
+    /// 每个状态都有一个关联的EActionState枚举值和一个PlayerController上下文对象。
+    /// Update(float deltaTime): 每一帧执行的逻辑，返回当前状态的下一个状态。
+    /// Coroutine(): 返回一个IEnumerator，用于执行协程逻辑。
+    /// OnBegin(): 当状态开始时调用的方法。
+    /// OnEnd(): 当状态结束时调用的方法。
+    /// IsCoroutine(): 检查当前状态是否包含协程逻辑。
+    /// </summary>
     public abstract class BaseActionState
     {
         protected EActionState state;
@@ -25,14 +30,15 @@ namespace Myd.Platform
         protected BaseActionState(EActionState state, PlayerController context)
         {
             this.state = state;
-            this.ctx = context;
+            ctx = context;
         }
 
         public EActionState State { get => state; }
 
         //每一帧都执行的逻辑
         public abstract EActionState Update(float deltaTime);
-
+        
+        //TODO:协程，当前未实现
         public abstract IEnumerator Coroutine();
 
         public abstract void OnBegin();
@@ -55,50 +61,52 @@ namespace Myd.Platform
 
         public FiniteStateMachine(int size)
         {
-            this.states = new S[size];
-            this.currentCoroutine = new Coroutine(true);
+            states = new S[size];
+            currentCoroutine = new Coroutine();
         }
 
         public void AddState(S state)
         {
-            this.states[(int)state.State] = state;
+            states[(int)state.State] = state;
         }
 
         public void Update(float deltaTime)
         {
-            State = (int)this.states[this.currState].Update(deltaTime);
-            if (this.currentCoroutine.Active)
+            State = (int)states[currState].Update(deltaTime);
+            if (currentCoroutine.Active)
             {
-                this.currentCoroutine.Update(deltaTime);
+                currentCoroutine.Update(deltaTime);
             }
         }
-
+        /// <summary>
+        /// State属性用于获取和设置状态机的当前状态。在设置新状态时，会触发状态转换的逻辑，包括记录状态转换、调用结束和开始方法，以及管理协程。
+        /// </summary>
         public int State
         {
             get
             {
-                return this.currState;
+                return currState;
             }
             set
             {
-                if (this.currState == value)
+                if (currState == value)
                     return;
-                this.prevState = this.currState;
-                this.currState = value;
-                Logging.Log($"====Enter State[{(EActionState)this.currState}],Leave State[{(EActionState)this.prevState}] ");
-                if (this.prevState != -1)
+                prevState = currState;
+                currState = value;
+                Logging.Log($"====Enter State[{(EActionState)currState}],Leave State[{(EActionState)prevState}] ");
+                if (prevState != -1)
                 {
-                    Logging.Log($"====State[{(EActionState)this.prevState}] OnEnd ");
-                    this.states[this.prevState].OnEnd();
+                    Logging.Log($"====State[{(EActionState)prevState}] OnEnd ");
+                    states[prevState].OnEnd();
                 }
-                Logging.Log($"====State[{(EActionState)this.currState}] OnBegin ");
-                this.states[this.currState].OnBegin();
-                if (this.states[this.currState].IsCoroutine())
+                Logging.Log($"====State[{(EActionState)currState}] OnBegin ");
+                states[currState].OnBegin();
+                if (states[currState].IsCoroutine())
                 {
-                    this.currentCoroutine.Replace(this.states[this.currState].Coroutine());
+                    currentCoroutine.Replace(states[currState].Coroutine());
                     return;
                 }
-                this.currentCoroutine.Cancel();
+                currentCoroutine.Cancel();
             }
         }
     }

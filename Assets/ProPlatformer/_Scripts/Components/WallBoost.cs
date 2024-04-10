@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -17,14 +15,14 @@ namespace Myd.Platform
         public float Timer => timer;
         public WallBoost(PlayerController playerController)
         {
-            this.controller = playerController;
-            this.dir = 0;
-            this.ResetTime();
+            controller = playerController;
+            dir = 0;
+            ResetTime();
         }
 
         public void ResetTime()
         {
-            this.timer = 0;
+            timer = 0;
         }
 
         public void Update(float deltaTime)
@@ -46,8 +44,8 @@ namespace Myd.Platform
             if (controller.MoveX == 0)
             {
                 Debug.Log("====WallBoost");
-                this.dir = -(int)controller.Facing;
-                this.timer = Constants.ClimbJumpBoostTime;
+                dir = -(int)controller.Facing;
+                timer = Constants.ClimbJumpBoostTime;
             }
         }
     }

@@ -1,9 +1,4 @@
-﻿
-
-using Myd.Common;
-using Myd.Platform;
-using Myd.Platform.Core;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -18,9 +13,9 @@ namespace Myd.Platform
         private PlayerRenderer playerRenderer;
         private PlayerController playerController;
 
-        private IGameContext gameContext;
+        private Game gameContext;
 
-        public Player(IGameContext gameContext)
+        public Player(Game gameContext)
         {
             this.gameContext = gameContext;
         }
@@ -28,16 +23,15 @@ namespace Myd.Platform
         //加载玩家实体
         public void Reload(Bounds bounds, Vector2 startPosition)
         {
-            this.playerRenderer = Object.Instantiate(Resources.Load<PlayerRenderer>("PlayerRenderer"));
+            playerRenderer = Object.Instantiate(Resources.Load<PlayerRenderer>("PlayerRenderer"));
             //this.playerRenderer = AssetHelper.Create<PlayerRenderer>("Assets/ProPlatformer/_Prefabs/PlayerRenderer.prefab");
-            this.playerRenderer.Reload();
             //初始化
-            this.playerController = new PlayerController(playerRenderer, gameContext.EffectControl);
-            this.playerController.Init(bounds, startPosition);
+            playerController = new PlayerController(playerRenderer, gameContext.sceneEffectManager);
+            playerController.Init(bounds, startPosition);
 
             PlayerParams playerParams = Resources.Load<PlayerParams>("PlayerParam");
             //PlayerParams playerParams = AssetHelper.LoadObject<PlayerParams>("Assets/ProPlatformer/PlayerParam.asset");
-            playerParams.SetReloadCallback(() => this.playerController.RefreshAbility());
+            playerParams.SetReloadCallback(() => playerController.RefreshAbility());
             playerParams.ReloadParams();
         }
 
@@ -47,6 +41,9 @@ namespace Myd.Platform
             Render();
         }
 
+        /// <summary>
+        /// 更新玩家渲染器的位置、缩放和面向方向。
+        /// </summary>
         private void Render()
         {
             playerRenderer.Render(Time.deltaTime);
@@ -55,25 +52,11 @@ namespace Myd.Platform
             scale.x = Mathf.Abs(scale.x) * (int)playerController.Facing;
             playerRenderer.transform.localScale = scale;
             playerRenderer.transform.position = playerController.Position;
-
-            //if (!lastFrameOnGround && this.playerController.OnGround)
-            //{
-            //    this.playerRenderer.PlayMoveEffect(true, this.playerController.GroundColor);
-            //}
-            //else if (lastFrameOnGround && !this.playerController.OnGround)
-            //{
-            //    this.playerRenderer.PlayMoveEffect(false, this.playerController.GroundColor);
-            //}
-            //this.playerRenderer.UpdateMoveEffect();
-
-            this.lastFrameOnGround = this.playerController.OnGround;
         }
-
-        private bool lastFrameOnGround;
 
         public Vector2 GetCameraPosition()
         {
-            if (this.playerController == null)
+            if (playerController == null)
             {
                 return Vector3.zero;
             }

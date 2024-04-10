@@ -1,12 +1,6 @@
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
-/// 
 namespace Myd.Platform {
     public class DashImpulse : MonoBehaviour
     {
@@ -14,7 +8,7 @@ namespace Myd.Platform {
 
         void Awake()
         {
-            source = this.GetComponent<CinemachineImpulseSource>();
+            source = GetComponent<CinemachineImpulseSource>();
         }
 
         public void Shake(Vector2 dir)

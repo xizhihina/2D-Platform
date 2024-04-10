@@ -1,37 +1,35 @@
-﻿using Myd.Common;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Myd.Platform
 {
     public class NormalState : BaseActionState
     {
-        public NormalState(PlayerController controller):base(EActionState.Normal, controller)
+        public NormalState(PlayerController controller):base(EActionState.Normal, controller)//设置state和ctx初值
         {
         }
-
+        
         public override IEnumerator Coroutine()
         {
             throw new NotImplementedException();
         }
-
+        
         public override bool IsCoroutine()
         {
             return false;
         }
-
+        
         public override void OnBegin()
         {
-            this.ctx.MaxFall = Constants.MaxFall;
+            ctx.MaxFall = Constants.MaxFall;
         }
 
         public override void OnEnd()
         {
-            this.ctx.WallBoost?.ResetTime();
-            this.ctx.WallSpeedRetentionTimer = 0;
-            this.ctx.HopWaitX = 0;
+            ctx.WallBoost?.ResetTime();
+            ctx.WallSpeedRetentionTimer = 0;
+            ctx.HopWaitX = 0;
         }
 
         public override EActionState Update(float deltaTime)
@@ -61,9 +59,9 @@ namespace Myd.Platform
             }
 
             //Dashing
-            if (this.ctx.CanDash)
+            if (ctx.CanDash)
             {
-                return this.ctx.Dash();
+                return ctx.Dash();
             }
 
             //Ducking
@@ -94,18 +92,18 @@ namespace Myd.Platform
             }
             else
             {
-                float mult = ctx.OnGround ? 1 : Constants.AirMult;
+                float mult = ctx.OnGround ? 1 : Constants.AirMulti;
                 //计算水平速度
                 float max = ctx.Holding == null ? Constants.MaxRun : Constants.HoldingMaxRun;
-                if (Math.Abs(ctx.Speed.x) > max && Math.Sign(ctx.Speed.x) == this.ctx.MoveX)
+                if (Math.Abs(ctx.Speed.x) > max && Math.Sign(ctx.Speed.x) == ctx.MoveX)
                 {
                     //同方向加速
-                    ctx.Speed.x = Mathf.MoveTowards(ctx.Speed.x, max * this.ctx.MoveX, Constants.RunReduce * mult * Time.deltaTime);
+                    ctx.Speed.x = Mathf.MoveTowards(ctx.Speed.x, max * ctx.MoveX, Constants.RunReduce * mult * Time.deltaTime);
                 }
                 else
                 {
                     //反方向减速
-                    ctx.Speed.x = Mathf.MoveTowards(ctx.Speed.x, max * this.ctx.MoveX, Constants.RunAccel * mult * Time.deltaTime);
+                    ctx.Speed.x = Mathf.MoveTowards(ctx.Speed.x, max * ctx.MoveX, Constants.RunAccel * mult * Time.deltaTime);
                 }
             }
             //计算竖直速度
@@ -115,22 +113,22 @@ namespace Myd.Platform
                     float maxFallSpeed = Constants.MaxFall;
                     float fastMaxFallSpeed = Constants.FastMaxFall;
 
-                    if (this.ctx.MoveY == -1 && this.ctx.Speed.y <= maxFallSpeed)
+                    if (ctx.MoveY == -1 && ctx.Speed.y <= maxFallSpeed)
                     {
-                        this.ctx.MaxFall = Mathf.MoveTowards(this.ctx.MaxFall, fastMaxFallSpeed, Constants.FastMaxAccel * deltaTime);
+                        ctx.MaxFall = Mathf.MoveTowards(ctx.MaxFall, fastMaxFallSpeed, Constants.FastMaxAccel * deltaTime);
 
                         //处理表现
-                        this.ctx.PlayFallEffect(ctx.Speed.y);
+                        ctx.PlayFallEffect(ctx.Speed.y);
                     }
                     else
                     {
-                        this.ctx.MaxFall = Mathf.MoveTowards(this.ctx.MaxFall, maxFallSpeed, Constants.FastMaxAccel * deltaTime);
+                        ctx.MaxFall = Mathf.MoveTowards(ctx.MaxFall, maxFallSpeed, Constants.FastMaxAccel * deltaTime);
                     }
                 }
 
                 if (!ctx.OnGround)
                 {
-                    float max = this.ctx.MaxFall;//最大下落速度
+                    float max = ctx.MaxFall;//最大下落速度
                     //Wall Slide
                     if ((ctx.MoveX == (int)ctx.Facing || (ctx.MoveX == 0 && GameInput.Grab.Checked())) && ctx.MoveY != -1)
                     {
@@ -176,9 +174,9 @@ namespace Myd.Platform
             if (GameInput.Jump.Pressed())
             {
                 //土狼时间范围内,允许跳跃
-                if (this.ctx.JumpCheck.AllowJump())
+                if (ctx.JumpCheck.AllowJump())
                 {
-                    this.ctx.Jump();
+                    ctx.Jump();
                 }
                 else if (ctx.CanUnDuck)
                 {

@@ -1,16 +1,12 @@
-﻿
-
-using Myd.Common;
-using Myd.Platform.Core;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
-using DG.Tweening;
+
 namespace Myd.Platform
 {
     /// <summary>
     /// 场景特效管理器
     /// </summary>
-    public class SceneEffectManager: MonoBehaviour, IEffectControl
+    public class SceneEffectManager: MonoBehaviour
     { 
         public static SceneEffectManager Instance; 
 
@@ -50,13 +46,13 @@ namespace Myd.Platform
         private TrailSnapshot Add(Vector2 position, Sprite sprite, Vector2 scale, int facing, Color color,
                 int depth, float duration = 1f, bool frozenUpdate = false, bool useRawDeltaTime = false)
         {
-            for (int index = 0; index < this.snapshots.Length; ++index)
+            for (int index = 0; index < snapshots.Length; ++index)
             {
-                if (this.snapshots[index] == null)
+                if (snapshots[index] == null)
                 {
-                    TrailSnapshot snapshot = Instantiate(trailSnapshotPrefab, this.transform);
+                    TrailSnapshot snapshot = Instantiate(trailSnapshotPrefab, transform);
                     snapshot.Init(index, position, sprite, scale, color, duration, depth, frozenUpdate, useRawDeltaTime, () => { SetSnapshot(index, null); });
-                    this.snapshots[index] = snapshot;
+                    snapshots[index] = snapshot;
                     return snapshot;
                 }
             }
@@ -65,36 +61,36 @@ namespace Myd.Platform
 
         public void SetSnapshot(int index, TrailSnapshot snapshot)
         {
-            this.snapshots[index] = snapshot;
+            snapshots[index] = snapshot;
         }
 
         public void RestAllEffect()
         {
-            this.vfxMoveDust.Play();
-            this.vfxJumpDust.Stop();
-            this.vfxLandDust.Stop();
-            this.vfxDashLine.Stop();
+            vfxMoveDust.Play();
+            vfxJumpDust.Stop();
+            vfxLandDust.Stop();
+            vfxDashLine.Stop();
         }
 
         public void JumpDust(Vector3 position, Color color, Vector2 dir)
         {
-            this.vfxJumpDust.transform.position = position;
-            this.vfxJumpDust.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
-            var main = this.vfxJumpDust.main;
+            vfxJumpDust.transform.position = position;
+            vfxJumpDust.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
+            var main = vfxJumpDust.main;
             main.startColor = color;
-            this.vfxJumpDust.Play();
+            vfxJumpDust.Play();
         }
 
         public void DashLine(Vector3 position, Vector2 dir)
         {
-            this.vfxDashLine.transform.position = position;
-            this.vfxDashLine.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
-            this.vfxDashLine.GetComponent<ParticleSystem>().Play();
+            vfxDashLine.transform.position = position;
+            vfxDashLine.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
+            vfxDashLine.GetComponent<ParticleSystem>().Play();
         }
 
         public void Ripple(Vector3 position)
         {
-            this.vfxRippleEffect.Ripple(position);
+            vfxRippleEffect.Ripple(position);
         }
 
         public void CameraShake(Vector2 dir)
@@ -109,19 +105,19 @@ namespace Myd.Platform
 
         public void LandDust(Vector3 position, Color color)
         {
-            this.vfxLandDust.transform.position = position;
-            var main = this.vfxLandDust.main;
+            vfxLandDust.transform.position = position;
+            var main = vfxLandDust.main;
             main.startColor = color;
-            this.vfxLandDust.Play();
+            vfxLandDust.Play();
         }
 
         public void SpeedRing(Vector3 position, Vector2 dir)
         {
-            GameObject speedRing = Instantiate(vfxSpeedRing, this.transform);
+            GameObject speedRing = Instantiate(vfxSpeedRing, transform);
             speedRing.transform.position = position;
             speedRing.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
             speedRing.transform.localScale = Vector3.zero;
-            DOTween.Sequence().Append(speedRing.transform.DOScale(Vector3.one * 1.2f, 1.5f).SetEase(DG.Tweening.Ease.OutCubic)).Join(speedRing.GetComponent<SpriteRenderer>().DOFade(0, 1.5f)).AppendCallback(() =>
+            DOTween.Sequence().Append(speedRing.transform.DOScale(Vector3.one * 1.2f, 1.5f).SetEase(Ease.OutCubic)).Join(speedRing.GetComponent<SpriteRenderer>().DOFade(0, 1.5f)).AppendCallback(() =>
             {
                 Destroy(speedRing);
             });

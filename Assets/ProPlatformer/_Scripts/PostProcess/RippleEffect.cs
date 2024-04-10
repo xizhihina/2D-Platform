@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Myd.Platform
 {
@@ -19,28 +18,28 @@ namespace Myd.Platform
         private float liveTime;
         private void Awake()
         {
-            this.scale1 = Vector2.one;
-            this.scale2 = Vector2.one * 2;
-            material = this.GetComponent<SpriteRenderer>().material;
+            scale1 = Vector2.one;
+            scale2 = Vector2.one * 2;
+            material = GetComponent<SpriteRenderer>().material;
         }
 
         public void Update()
         {
             if (liveTime >= TotalTime)
             {
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
             liveTime += Time.deltaTime;
-            this.transform.localScale = this.transform.localScale + Vector3.one * WaveSpeed * Time.deltaTime;
-            this.material.SetFloat("_DistortIntensity", (1 - Mathf.Clamp(liveTime / TotalTime, 0, 1)) * Intensity);
+            transform.localScale = transform.localScale + Vector3.one * WaveSpeed * Time.deltaTime;
+            material.SetFloat("_DistortIntensity", (1 - Mathf.Clamp(liveTime / TotalTime, 0, 1)) * Intensity);
         }
 
         public void Ripple(Vector3 position)
         {
-            this.gameObject.SetActive(true);
-            this.transform.localScale = this.scale1;
-            this.transform.position = position;
-            this.liveTime = 0;
+            gameObject.SetActive(true);
+            transform.localScale = scale1;
+            transform.position = position;
+            liveTime = 0;
         }
     }
 }

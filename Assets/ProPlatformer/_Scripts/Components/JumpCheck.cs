@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-
-namespace Myd.Platform
+﻿namespace Myd.Platform
 {
     /// <summary>
     /// 跳跃检查组件
@@ -16,14 +12,14 @@ namespace Myd.Platform
         private bool jumpGrace;
         public JumpCheck(PlayerController playerController, bool jumpGrace)
         {
-            this.controller = playerController;
-            this.ResetTime();
+            controller = playerController;
+            ResetTime();
             this.jumpGrace = jumpGrace;
         }
 
         public void ResetTime()
         {
-            this.timer = 0;
+            timer = 0;
         }
 
         public void Update(float deltaTime)

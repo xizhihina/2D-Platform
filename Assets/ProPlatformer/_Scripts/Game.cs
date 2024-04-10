@@ -1,8 +1,4 @@
-﻿
-using DG.Tweening;
-using Myd.Common;
-using Myd.Platform.Core;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Myd.Platform
@@ -14,7 +10,7 @@ namespace Myd.Platform
         Pause,  //游戏暂停
         Fail,   //游戏失败
     }
-    public class Game : MonoBehaviour, IGameContext
+    public class Game : MonoBehaviour
     {
         public static Game Instance;
 
@@ -22,7 +18,7 @@ namespace Myd.Platform
         public Level level;
         //场景特效管理器
         [SerializeField]
-        private SceneEffectManager sceneEffectManager;
+        public SceneEffectManager sceneEffectManager;
         [SerializeField]
         private SceneCamera gameCamera;
         //玩家
@@ -45,16 +41,16 @@ namespace Myd.Platform
 
             //加载玩家
             player.Reload(level.Bounds, level.StartPosition);
-            this.gameState = EGameState.Play;
+            gameState = EGameState.Play;
             yield return null;
         }
 
         public void Update()
         {
-            float deltaTime = Time.unscaledDeltaTime;
+            float deltaTime = Time.unscaledDeltaTime;//从上一帧到当前帧的独立于 timeScale 的时间间隔（以秒为单位）（只读）。与 deltaTime 不同，该值不受 timeScale 的影响。
             if (UpdateTime(deltaTime))
             {
-                if (this.gameState == EGameState.Play)
+                if (gameState == EGameState.Play)
                 {
                     GameInput.Update(deltaTime);
                     //更新玩家逻辑数据
@@ -99,13 +95,8 @@ namespace Myd.Platform
         #endregion
         public void CameraShake(Vector2 dir, float duration)
         {
-            this.gameCamera.Shake(dir, duration);
+            gameCamera.Shake(dir, duration);
         }
-
-        public IEffectControl EffectControl { get=>this.sceneEffectManager; }
-
-        public ISoundControl SoundControl { get; }
-        
     }
 
 }
