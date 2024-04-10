@@ -20,7 +20,7 @@ namespace Myd.Platform
         [SerializeField]
         public SceneEffectManager sceneEffectManager;
         [SerializeField]
-        private SceneCamera gameCamera;
+        private MyCamera gameCamera;
         //玩家
         Player player;
 
@@ -52,11 +52,12 @@ namespace Myd.Platform
             {
                 if (gameState == EGameState.Play)
                 {
+                    //更新按键状态
                     GameInput.Update(deltaTime);
                     //更新玩家逻辑数据
                     player.Update(deltaTime);
                     //更新摄像机
-                    gameCamera.SetCameraPosition(player.GetCameraPosition());
+                    // gameCamera.SetCameraPosition(player.GetCameraPosition());
                 }
             }
         }

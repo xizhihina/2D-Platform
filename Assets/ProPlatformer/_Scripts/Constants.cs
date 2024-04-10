@@ -49,8 +49,6 @@
         public static float WallSpeedRetentionTime = .06f; //撞墙以后可以允许的保持速度的时间
         public static float WallSlideTime = 1.2f; //墙壁滑行时间
         public static float WallSlideStartMax = -2f;
-
-
         #endregion
 
         #region Dash相关参数

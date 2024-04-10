@@ -61,8 +61,8 @@ namespace Myd.Platform
 
         public void PlayWallSlideEffect(Vector2 dir)
         {
-            Vector2 origion = Position + Vector2.up * -0.5f;
-            RaycastHit2D hit = Physics2D.Raycast(origion, dir, 0.5f, GroundMask);
+            Vector2 origin = Position + Vector2.up * -0.5f;
+            RaycastHit2D hit = Physics2D.Raycast(origin, dir, 0.5f, GroundMask);
             Color color = Color.white;
             if (hit && hit.collider)
             {

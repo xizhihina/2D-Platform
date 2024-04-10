@@ -8,7 +8,6 @@
         private float timer;
 
         private PlayerController controller;
-        public float Timer => timer;
         private bool jumpGrace;
         public JumpCheck(PlayerController playerController, bool jumpGrace)
         {

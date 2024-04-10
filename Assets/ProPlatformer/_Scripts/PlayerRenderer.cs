@@ -9,15 +9,15 @@ namespace Myd.Platform
     public class PlayerRenderer : MonoBehaviour
     {
         [SerializeField]
-        public SpriteRenderer spriteRenderer;
+        public SpriteRenderer spriteRenderer;//玩家角色的主要精灵渲染器
 
         [SerializeField]
-        public ParticleSystem vfxDashFlux;
+        public ParticleSystem vfxDashFlux;//玩家冲刺时的特效。
         [SerializeField]
-        public ParticleSystem vfxWallSlide;
+        public ParticleSystem vfxWallSlide;//玩家墙面滑动时的特效
 
         [SerializeField]
-        public TrailRenderer hair;
+        public TrailRenderer hair;//玩家头发的拖尾效果。
 
         [SerializeField]
         public SpriteRenderer hairSprite01;
@@ -50,15 +50,6 @@ namespace Myd.Platform
         public void SetSpriteScale(Vector2 scale)
         {
             currSpriteScale = scale;
-        }
-
-        public void DashFlux()
-        {
-
-        }
-
-        public void Slash(bool enable)
-        {
         }
 
         public void WallSlide(Color color, Vector2 dir)
@@ -94,12 +85,5 @@ namespace Myd.Platform
             hairSprite01.color = color;
             hairSprite02.color = color;
         }
-    }
-
-    //测试用的绘制接口
-    public enum EGizmoDrawType
-    {
-        SlipCheck,
-        ClimbCheck,
     }
 }

@@ -4,17 +4,15 @@ using UnityEngine;
 
 namespace Myd.Platform
 {
-    public struct Asix
-    {
-        public float moveX;
-        public float MoveY;
-    }
-
     /// <summary>
     /// 玩家操作控制器
     /// </summary>
-    public partial class PlayerController
+    public partial class PlayerController:Singleton<PlayerController>
     {
+        public PlayerController()
+        {
+            childOrOld = ChildOrOld.Child;
+        }
         private readonly int GroundMask;
 
         float varJumpTimer;
@@ -52,7 +50,7 @@ namespace Myd.Platform
         public PlayerRenderer SpriteControl { get; private set; }
         //特效控制器
         public SceneEffectManager EffectControl { get; private set; } 
-        public SceneCamera camera { get; private set; }
+        // public MyCamera camera { get; private set; }
         public PlayerController(PlayerRenderer spriteControl, SceneEffectManager effectControl)
         {
             SpriteControl = spriteControl;
@@ -167,7 +165,7 @@ namespace Myd.Platform
                 else
                 {
                     //输入
-                    moveX = Math.Sign(Input.GetAxisRaw("Horizontal"));
+                    moveX = Math.Sign(Input.GetAxisRaw("Horizontal"));//返回-1,0,1
                 }
 
                 //Facing
@@ -318,13 +316,6 @@ namespace Myd.Platform
 
         public void ClimbJump()
         {
-            if (!onGround)
-            {
-                //Stamina -= ClimbJumpCost;
-
-                //sweatSprite.Play("jump", true);
-                //Input.Rumble(RumbleStrength.Light, RumbleLength.Medium);
-            }
             Jump();
             WallBoost?.Active();
         }
@@ -365,26 +356,19 @@ namespace Myd.Platform
         
         
 
-        public bool CanDash
-        {
-            get
-            {
-                return GameInput.Dash.Pressed() && dashCooldownTimer <= 0 && dashes > 0;
-            }
-        }
+        public bool CanDash => GameInput.Dash.Pressed() && dashCooldownTimer <= 0 && dashes > 0;
 
         public float WallSpeedRetentionTimer
         {
-            get { return wallSpeedRetentionTimer; }
-            set { wallSpeedRetentionTimer = value; }
+            get => wallSpeedRetentionTimer;
+            set => wallSpeedRetentionTimer = value;
         }
         public Vector2 Speed;
 
         public object Holding => null;
 
         public bool OnGround => onGround;
-        private Color groundColor = Color.white;
-        public Color GroundColor => groundColor;
+
         public Vector2 Position { get; private set; }
         //表示进入爬墙状态有0.1秒时间,不发生移动，为了让玩家看清发生了爬墙的动作
         public float ClimbNoMoveTimer { get; set; }
@@ -392,14 +376,8 @@ namespace Myd.Platform
 
         public float VarJumpTimer
         {
-            get
-            {
-                return varJumpTimer;
-            }
-            set
-            {
-                varJumpTimer = value;
-            }
+            get => varJumpTimer;
+            set => varJumpTimer = value;
         }
 
         public int MoveX => moveX;
@@ -408,7 +386,7 @@ namespace Myd.Platform
         public float MaxFall { get => maxFall; set => maxFall = value; }
         public float DashCooldownTimer { get => dashCooldownTimer; set => dashCooldownTimer = value; }
         public float DashRefillCooldownTimer { get => dashRefillCooldownTimer; set => dashRefillCooldownTimer = value; }
-        public Vector2 LastAim { get; set; }
+        public Vector2  LastAim { get; set; }
         public Facings Facing { get; set; }  //当前朝向
         public EActionState Dash()
         {
@@ -424,10 +402,7 @@ namespace Myd.Platform
 
         public bool Ducking
         {
-            get
-            {
-                return collider == duckHitbox || collider == duckHurtbox;
-            }
+            get => collider == duckHitbox || collider == duckHurtbox;
             set
             {
                 if (value)
@@ -469,13 +444,6 @@ namespace Myd.Platform
             collider = oldC;
 
             return ret;
-        }
-        public bool IsFall
-        {
-            get
-            {
-                return !wasOnGround && OnGround;
-            }
         }
     }
 

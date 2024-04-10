@@ -2,6 +2,20 @@
 
 namespace Myd.Common
 {
+    /// <summary>
+    /// 这份文件是一个C#脚本，定义了一个名为`Ease`的静态类，它提供了一系列用于计算缓动（Easing）函数的静态方法和常量。缓动函数在动画和交互设计中常用于在一段时间内改变数值，使得动画更加平滑和自然。这个类属于`Myd.Common`命名空间。
+    ///以下是`Ease`类的核心内容和特性：
+    ///    1. **缓动函数常量**:
+    ///    - 定义了多种缓动函数的实现，如`Linear`、`SineIn`、`SineOut`、`SineInOut`、`QuadIn`、`QuadOut`、`QuadInOut`、`CubeIn`、`CubeOut`、`CubeInOut`、`QuintIn`、`QuintOut`、`QuintInOut`、`ExpoIn`、`ExpoOut`、`ExpoInOut`、`BackIn`、`BackOut`、`BackInOut`、`BigBackIn`、`BigBackOut`、`BigBackInOut`、`ElasticIn`、`ElasticOut`、`ElasticInOut`、`BounceIn`、`BounceOut`、`BounceInOut`等。
+    ///    - 这些缓动函数覆盖了从线性变化到各种复杂的非线性变化，如弹跳、反弹、指数衰减等。
+    ///    2. **辅助方法**:
+    ///    - `Invert(Easer easer)`: 用于创建一个反向的缓动函数。
+    ///     - `Follow(Easer first, Easer second)`: 用于创建一个组合的缓动函数，它将两个缓动函数平滑地连接起来。
+    ///    - `UpDown(float eased)`: 用于将一个已经计算好的缓动值反转，使其先增长后减少。
+    ///    3. **缓动函数委托类型**:
+    ///    - 定义了一个名为`Easer`的委托类型，它是一个接受一个`float`类型参数并返回一个`float`类型的函数指针。这个委托类型用于表示缓动函数。
+    ///     `Ease`类通过提供这些缓动函数，为开发者在创建动画和交互效果时提供了强大的工具。开发者可以根据需要选择合适的缓动函数来控制动画的节奏和感觉，从而提升用户体验。
+    /// </summary>
     public static class Ease
     {
         public static readonly Easer Linear = t => t;

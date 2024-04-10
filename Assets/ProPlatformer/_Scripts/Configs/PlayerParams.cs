@@ -107,20 +107,26 @@ namespace Myd.Platform
         {
             reloadCallback = onReload;
         }
-
+        // OnValidate方法是一个仅限编辑器的函数，在Unity加载脚本或检查器中的值更改时调用。它的调用时机非常特殊，这里总结一下。
+        // 1. OnValidate不受播放模式影响，只要其值发生变化，在非播放状态下也会被调用（可以用于非播放模式修改参数后更新）。
+        // 2. 不受enabled状态影响，即使其所在的脚本被禁用，修改值时也会被正常调用。
+        // 3. 更改脚本enabled状态时，会调用一次OnValidate。如果在Play Mode，OnValidated的调用时机在OnDisable或者OnEnable前。
+        // 4. 更改GameObject active状态不会调用OnValidate，只有OnDisable和OnEnable会被调用。
+        // 5. 初始加载时，无论enabled状态和active状态如何，都会被调用多次。其调用时机在Awake之前。
         public void OnValidate()
         {
             ReloadParams();
         }
 
+        //将设置的参数重新加载到全局参数Constants中
         public void ReloadParams()
         {
             Debug.Log("=======更新所有Player配置参数");
-            Constants.MaxRun = MaxRun;
-            Constants.RunAccel = RunAccel;
-            Constants.RunReduce = RunReduce;
+            Constants.MaxRun = MaxRun;//最大水平速度
+            Constants.RunAccel = RunAccel;//水平方向加速度
+            Constants.RunReduce = RunReduce;//水平方向减速度
             Constants.Gravity = Gravity; //重力
-            Constants.HalfGravThreshold = HalfGravThreshold;
+            Constants.HalfGravThreshold = HalfGravThreshold;//当速度小于该阈值时，重力减半。值越小，滞空时间越长，0表示关闭
             Constants.MaxFall = MaxFall; //普通最大下落速度
             Constants.FastMaxFall = FastMaxFall;  //快速最大下落速度
             Constants.FastMaxAccel = FastMaxAccel; //快速下落加速度
@@ -170,6 +176,26 @@ namespace Myd.Platform
             Constants.EnableWallBoost = EnableWallBoost; //WallBoost
 
             reloadCallback?.Invoke();
+        }
+        /// <summary>
+        /// 切换为老年态
+        /// </summary>
+        public void ChangeToOld()
+        {
+            if (PlayerController.Instance.childOrOld == ChildOrOld.Old) return;
+            Debug.Log("=======切换为老年态");
+            Constants.MaxRun = MaxRun / 2;
+            PlayerController.Instance.childOrOld = ChildOrOld.Old;
+        }
+        /// <summary>
+        /// 切换为年轻态
+        /// </summary>
+        public void ChangeToChild()
+        {
+            if (PlayerController.Instance.childOrOld==ChildOrOld.Child) return;
+            Debug.Log("=======切换为年轻态");
+            Constants.MaxRun = MaxRun;
+            PlayerController.Instance.childOrOld = ChildOrOld.Child;
         }
     }
 }

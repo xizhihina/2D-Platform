@@ -6,7 +6,6 @@ namespace Myd.Platform
     /// 玩家类：包含
     /// 1、玩家显示器
     /// 2、玩家控制器（核心控制器）
-    /// 并允许两者在内部进行交互
     /// </summary>
     public class Player
     {

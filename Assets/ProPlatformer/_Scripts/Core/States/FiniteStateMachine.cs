@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using Myd.Common;
+using UnityEngine;
+
 /*
  * 有限状态机
  */
@@ -93,13 +95,13 @@ namespace Myd.Platform
                     return;
                 prevState = currState;
                 currState = value;
-                Logging.Log($"====Enter State[{(EActionState)currState}],Leave State[{(EActionState)prevState}] ");
+                Debug.Log($"====Enter State[{(EActionState)currState}],Leave State[{(EActionState)prevState}] ");
                 if (prevState != -1)
                 {
-                    Logging.Log($"====State[{(EActionState)prevState}] OnEnd ");
+                    Debug.Log($"====State[{(EActionState)prevState}] OnEnd ");
                     states[prevState].OnEnd();
                 }
-                Logging.Log($"====State[{(EActionState)currState}] OnBegin ");
+                Debug.Log($"====State[{(EActionState)currState}] OnBegin ");
                 states[currState].OnBegin();
                 if (states[currState].IsCoroutine())
                 {

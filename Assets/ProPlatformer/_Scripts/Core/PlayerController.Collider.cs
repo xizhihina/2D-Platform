@@ -21,22 +21,11 @@ namespace Myd.Platform
         private Rect collider;
 
 
-        public void AdjustPosition(Vector2 adjust)
-        {
-            UpdateCollideX(adjust.x);
-            UpdateCollideY(adjust.y);
-        }
-
         //碰撞检测
         public bool CollideCheck(Vector2 position, Vector2 dir, float dist = 0)
         {
             Vector2 origion = position + collider.position;
             return Physics2D.OverlapBox(origion + dir * (dist + DEVIATION), collider.size, 0, GroundMask);
-        }
-
-        public bool OverlapPoint(Vector2 position)
-        {
-            return Physics2D.OverlapPoint(position, GroundMask);
         }
 
         //攀爬检查
@@ -54,7 +43,6 @@ namespace Myd.Platform
         //根据碰撞调整X轴上的最终移动距离
         protected void UpdateCollideX(float distX)
         {
-            Vector2 targetPosition = Position;
             //使用校正
             float distance = distX;
             int correctTimes = 1;

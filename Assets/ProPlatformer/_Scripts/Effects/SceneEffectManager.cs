@@ -62,7 +62,7 @@ namespace Myd.Platform
             snapshots[index] = snapshot;
         }
 
-        public void RestAllEffect()
+        public void ResetAllEffect()
         {
             vfxMoveDust.Play();
             vfxJumpDust.Stop();

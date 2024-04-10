@@ -16,7 +16,7 @@ namespace Myd.Platform
         public override void OnBegin()
         {
             ctx.launched = false;
-            //顿帧
+            //冻帧
             ctx.EffectControl.Freeze(0.05f);
 
             ctx.WallSlideTimer = Constants.WallSlideTime;
@@ -116,12 +116,10 @@ namespace Myd.Platform
             ctx.PlayDashFluxEffect(DashDir, true);
 
             ctx.PlayDashEffect(ctx.Position, dir);
-            ctx.SpriteControl.Slash(true);
             ctx.PlayTrailEffect((int)ctx.Facing);
             ctx.DashTrailTimer = .08f;
             yield return Constants.DashTime;
 
-            ctx.SpriteControl.Slash(false);
             ctx.PlayTrailEffect((int)ctx.Facing);
             if (DashDir.y >= 0)
             {

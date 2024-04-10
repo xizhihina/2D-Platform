@@ -12,7 +12,6 @@ namespace Myd.Platform
         private float timer;
         private int dir;
         private PlayerController controller;
-        public float Timer => timer;
         public WallBoost(PlayerController playerController)
         {
             controller = playerController;
