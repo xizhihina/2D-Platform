@@ -182,20 +182,20 @@ namespace Myd.Platform
         /// </summary>
         public void ChangeToOld()
         {
-            if (PlayerController.Instance.childOrOld == ChildOrOld.Old) return;
+            if (Player.Instance.playerController.childOrOld == ChildOrOld.Old) return;
             Debug.Log("=======切换为老年态");
             Constants.MaxRun = MaxRun / 2;
-            PlayerController.Instance.childOrOld = ChildOrOld.Old;
+            Player.Instance.playerController.childOrOld = ChildOrOld.Old;
         }
         /// <summary>
         /// 切换为年轻态
         /// </summary>
         public void ChangeToChild()
         {
-            if (PlayerController.Instance.childOrOld==ChildOrOld.Child) return;
+            if (Player.Instance.playerController.childOrOld==ChildOrOld.Child) return;
             Debug.Log("=======切换为年轻态");
             Constants.MaxRun = MaxRun;
-            PlayerController.Instance.childOrOld = ChildOrOld.Child;
+            Player.Instance.playerController.childOrOld = ChildOrOld.Child;
         }
     }
 }

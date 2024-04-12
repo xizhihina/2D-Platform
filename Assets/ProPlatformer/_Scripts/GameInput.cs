@@ -12,7 +12,7 @@ namespace Myd.Platform
     /// </summary>
     public struct VirtualJoystick
     {
-        public Vector2 Value { get => new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));}//返回值是{-1，0，1}
+        public Vector2 Value { get => new(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));}//返回值是{-1，0，1}
     }
     /// <summary>
     /// 虚拟按键
@@ -44,7 +44,7 @@ namespace Myd.Platform
         public bool Pressed()
         {
             //老年态禁用
-            if (PlayerController.Instance.childOrOld==ChildOrOld.Old)
+            if (Player.Instance.playerController.childOrOld==ChildOrOld.Old)
             {
                 return false;
             }
@@ -54,7 +54,7 @@ namespace Myd.Platform
         public bool Checked()
         {
             //老年态禁用
-            if (PlayerController.Instance.childOrOld == ChildOrOld.Old)
+            if (Player.Instance.playerController.childOrOld == ChildOrOld.Old)
             {
                 return false;
             }

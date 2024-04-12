@@ -16,7 +16,7 @@ namespace Myd.Platform
         [SerializeField]
         private float ShakeStrength = 1;
         [SerializeField]
-        private AnimationCurve ShakeCurve = new AnimationCurve(new Keyframe(0, -1.4f, -7.9f, -7.9f), new Keyframe(0.27f, 0.78f, 23.4f, 23.4f), new Keyframe(0.54f, -0.12f, 22.6f, 22.6f), new Keyframe(0.75f, 0.042f, 9.23f, 9.23f), new Keyframe(0.9f, -0.02f, 5.8f, 5.8f), new Keyframe(0.95f, -0.006f, -3.0f, -3.0f), new Keyframe(1, 0, 0, 0));
+        private AnimationCurve ShakeCurve = new(new Keyframe(0, -1.4f, -7.9f, -7.9f), new Keyframe(0.27f, 0.78f, 23.4f, 23.4f), new Keyframe(0.54f, -0.12f, 22.6f, 22.6f), new Keyframe(0.75f, 0.042f, 9.23f, 9.23f), new Keyframe(0.9f, -0.02f, 5.8f, 5.8f), new Keyframe(0.95f, -0.006f, -3.0f, -3.0f), new Keyframe(1, 0, 0, 0));
 
         // public void SetCameraPosition(Vector2 cameraPosition)
         // {

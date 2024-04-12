@@ -7,29 +7,22 @@ namespace Myd.Platform
     /// 1、玩家显示器
     /// 2、玩家控制器（核心控制器）
     /// </summary>
-    public class Player
+    public class Player:Singleton<Player>
     {
-        private PlayerRenderer playerRenderer;
-        private PlayerController playerController;
+        public PlayerRenderer playerRenderer;
+        public PlayerController playerController;
 
-        private Game gameContext;
-
-        public Player(Game gameContext)
-        {
-            this.gameContext = gameContext;
-        }
+        public Game gameContext;
 
         //加载玩家实体
         public void Reload(Bounds bounds, Vector2 startPosition)
         {
             playerRenderer = Object.Instantiate(Resources.Load<PlayerRenderer>("PlayerRenderer"));
-            //this.playerRenderer = AssetHelper.Create<PlayerRenderer>("Assets/ProPlatformer/_Prefabs/PlayerRenderer.prefab");
             //初始化
-            playerController = new PlayerController(playerRenderer, gameContext.sceneEffectManager);
+            playerController = new PlayerController(playerRenderer, Game.Instance.sceneEffectManager);
             playerController.Init(bounds, startPosition);
 
             PlayerParams playerParams = Resources.Load<PlayerParams>("PlayerParam");
-            //PlayerParams playerParams = AssetHelper.LoadObject<PlayerParams>("Assets/ProPlatformer/PlayerParam.asset");
             playerParams.SetReloadCallback(() => playerController.RefreshAbility());
             playerParams.ReloadParams();
         }

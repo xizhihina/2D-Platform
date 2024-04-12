@@ -13,7 +13,7 @@ using UnityEngine.Events;
 /// </summary>
 public class YTEventManager : Singleton<YTEventManager>
 {
-    private Dictionary<string, Delegate> _eventDic = new Dictionary<string, Delegate>();
+    private Dictionary<string, Delegate> _eventDic = new();
     /// <summary>
     /// 订阅事件核对，预防订阅事件为空或方法为空的情况，正常情况下不执行
     /// </summary>

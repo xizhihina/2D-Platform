@@ -30,7 +30,7 @@ MonoBehaviour:
   UpwardCornerCorrection: 4
   DashSpeed: 24
   EndDashSpeed: 16
-  EndDashUpMult: 0.75
+  EndDashUpMulti: 0.75
   DashTime: 0.15
   DashCooldown: 0.2
   DashRefillCooldown: 0.1
@@ -43,12 +43,12 @@ MonoBehaviour:
   ClimbDownSpeed: -8
   ClimbSlipSpeed: -3
   ClimbAccel: 90
-  ClimbGrabYMult: 0.2
+  ClimbGrabYMulti: 0.2
   ClimbHopY: 12
   ClimbHopX: 10
   ClimbHopForceTime: 0.2
   ClimbJumpBoostTime: 0.2
   ClimbHopNoWindTime: 0.3
   DuckFriction: 50
-  DuckSuperJumpXMult: 1.25
-  DuckSuperJumpYMult: 0.5
+  DuckSuperJumpXMulti: 1.25
+  DuckSuperJumpYMulti: 0.5

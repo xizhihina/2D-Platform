@@ -22,7 +22,7 @@ namespace Myd.Platform
         [SerializeField]
         private MyCamera gameCamera;
         //玩家
-        Player player;
+        // Player player;
 
         EGameState gameState;
 
@@ -32,7 +32,8 @@ namespace Myd.Platform
 
             gameState = EGameState.Load;
 
-            player = new Player(this);
+            // player = new Player(this);
+            Player.Instance.gameContext = this;
         }
 
         IEnumerator Start()
@@ -40,7 +41,7 @@ namespace Myd.Platform
             yield return null;
 
             //加载玩家
-            player.Reload(level.Bounds, level.StartPosition);
+            Player.Instance.Reload(level.Bounds, level.StartPosition);
             gameState = EGameState.Play;
             yield return null;
         }
@@ -55,7 +56,7 @@ namespace Myd.Platform
                     //更新按键状态
                     GameInput.Update(deltaTime);
                     //更新玩家逻辑数据
-                    player.Update(deltaTime);
+                    Player.Instance.Update(deltaTime);
                     //更新摄像机
                     // gameCamera.SetCameraPosition(player.GetCameraPosition());
                 }

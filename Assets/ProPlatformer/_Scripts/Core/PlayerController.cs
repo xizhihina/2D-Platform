@@ -7,12 +7,8 @@ namespace Myd.Platform
     /// <summary>
     /// 玩家操作控制器
     /// </summary>
-    public partial class PlayerController:Singleton<PlayerController>
+    public partial class PlayerController
     {
-        public PlayerController()
-        {
-            childOrOld = ChildOrOld.Child;
-        }
         private readonly int GroundMask;
 
         float varJumpTimer;
@@ -87,7 +83,7 @@ namespace Myd.Platform
             stateMachine.State = (int)EActionState.Normal;
             lastDashes = dashes = 1;
             Position = startPosition;
-            collider = normalHitbox;
+            collider = normalHitBox;
 
             SpriteControl.SetSpriteScale(NORMAL_SPRITE_SCALE);
 
@@ -402,16 +398,16 @@ namespace Myd.Platform
 
         public bool Ducking
         {
-            get => collider == duckHitbox || collider == duckHurtbox;
+            get => collider == duckHitBox;
             set
             {
                 if (value)
                 {
-                    collider = duckHitbox;
+                    collider = duckHitBox;
                     return;
                 }
 
-                collider = normalHitbox;
+                collider = normalHitBox;
                 PlayDuck(value);
             }
         }
@@ -424,7 +420,7 @@ namespace Myd.Platform
                 if (!Ducking)
                     return true;
                 Rect lastCollider = collider;
-                collider = normalHitbox;
+                collider = normalHitBox;
                 bool noCollide = !CollideCheck(Position, Vector2.zero);
                 collider = lastCollider;
                 return noCollide;
@@ -436,7 +432,7 @@ namespace Myd.Platform
             Vector2 oldP = Position;
             Rect oldC = collider;
             Position = at;
-            collider = duckHitbox;
+            collider = duckHitBox;
 
             bool ret = !CollideCheck(Position, Vector2.zero);
 

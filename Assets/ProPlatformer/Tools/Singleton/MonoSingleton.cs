@@ -1,8 +1,8 @@
 using UnityEngine;
 
 public class MonoSingleton<T> : MonoBehaviour where T : new()
-{//TODO：这个单例还要完善，继承MonoBehaviour的单例不能用普通单例实现方法，否则启动游戏时未激活的脚本执行awake会报错，比如背包
-    private static object _lock = new object();
+{//TODO锛氳繖涓崟渚嬭繕瑕佸畬鍠勶紝缁ф壙MonoBehaviour鐨勫崟渚嬩笉鑳界敤鏅�氬崟渚嬪疄鐜版柟娉曪紝鍚﹀垯鍚姩娓告垙鏃舵湭婵�娲荤殑鑴氭湰鎵цawake浼氭姤閿欙紝姣斿鑳屽寘
+    private static object _lock = new();
 
     public string meaning = string.Empty;
 

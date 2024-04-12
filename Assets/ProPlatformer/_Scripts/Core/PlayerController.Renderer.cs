@@ -13,13 +13,13 @@ namespace Myd.Platform
         public float DashTrailTimer { get; set; }
 
         public static Vector2 NORMAL_SPRITE_SCALE = Vector2.one;
-        public static Vector2 DUCK_SPRITE_SCALE = new Vector2(1F, 0.75f);
+        public static Vector2 DUCK_SPRITE_SCALE = new(1F, 0.75f);
 
         //public Vector2 CurrSpriteScale { get; set; } = NORMAL_SPRITE_SCALE;
 
         public Color NormalHairColor = new Color32(0xAC, 0x32, 0x32, 0xFF);//00FFA2
         public Color UsedHairColor = new Color32(0x44, 0xB7, 0xFF, 0xFF);
-        public Color FlashHairColor = new Color(0.6f, 0.6f, 0.6f, 1);
+        public Color FlashHairColor = new(0.6f, 0.6f, 0.6f, 1);
 
         public Color HairColor { get; private set; }
 

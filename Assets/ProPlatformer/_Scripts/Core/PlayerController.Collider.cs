@@ -13,10 +13,8 @@ namespace Myd.Platform
         const float STEP = 0.1f;  //碰撞检测步长，对POINT检测用
         const float DEVIATION = 0.02f;  //碰撞检测误差
 
-        private readonly Rect normalHitbox = new Rect(0, -0.25f, 0.8f, 1.1f);
-        private readonly Rect duckHitbox = new Rect(0, -0.5f, 0.8f, 0.6f);
-        private readonly Rect normalHurtbox = new Rect(0f, -0.15f, 0.8f, 0.9f);
-        private readonly Rect duckHurtbox = new Rect(8f, 4f, 0.8f, 0.4f);
+        private readonly Rect normalHitBox = new(0, -0.25f, 0.8f, 1.1f);
+        private readonly Rect duckHitBox = new(0, -0.5f, 0.8f, 0.6f);
 
         private Rect collider;
 
@@ -24,8 +22,9 @@ namespace Myd.Platform
         //碰撞检测
         public bool CollideCheck(Vector2 position, Vector2 dir, float dist = 0)
         {
-            Vector2 origion = position + collider.position;
-            return Physics2D.OverlapBox(origion + dir * (dist + DEVIATION), collider.size, 0, GroundMask);
+            Vector2 origin = position + collider.position;
+            //返回Collider2D 与该盒体重叠的碰撞体。GroundMask="Ground"
+            return Physics2D.OverlapBox(origin + dir * (dist + DEVIATION), collider.size, 0, GroundMask);
         }
 
         //攀爬检查
