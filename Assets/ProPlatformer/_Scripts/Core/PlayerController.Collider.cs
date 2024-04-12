@@ -27,18 +27,6 @@ namespace Myd.Platform
             return Physics2D.OverlapBox(origin + dir * (dist + DEVIATION), collider.size, 0, GroundMask);
         }
 
-        //攀爬检查
-        public bool ClimbCheck(int dir, float yAdd = 0)
-        {
-            //获取当前的碰撞体
-            Vector2 origion = Position + collider.position;
-            if (Physics2D.OverlapBox(origion + Vector2.up * yAdd + Vector2.right * dir * (Constants.ClimbCheckDist * 0.1f + DEVIATION), collider.size, 0, GroundMask))
-            {
-                return true;
-            } 
-            return false;
-        }
-
         //根据碰撞调整X轴上的最终移动距离
         protected void UpdateCollideX(float distX)
         {
@@ -64,7 +52,6 @@ namespace Myd.Platform
                     if (wallSpeedRetentionTimer <= 0)
                     {
                         wallSpeedRetained = Speed.x;
-                        wallSpeedRetentionTimer = Constants.WallSpeedRetentionTime;
                     }
                     break;
                 }
@@ -74,7 +61,6 @@ namespace Myd.Platform
 
         protected void UpdateCollideY(float distY)
         {
-            Vector2 targetPosition = Position;
             //使用校正
             float distance = distY;
             int correctTimes = 1; //默认可以迭代位置10次
@@ -123,31 +109,6 @@ namespace Myd.Platform
                 return true;
             }
             return false;
-        }
-
-        //根据整个关卡的边缘框进行检测,确保人物在关卡的框内.
-        public bool ClimbBoundsCheck(int dir)
-        {
-            return true;
-            //return base.Left + (float)(dir * 2) >= (float)this.level.Bounds.Left && base.Right + (float)(dir * 2) < (float)this.level.Bounds.Right;
-        }
-
-        //墙壁上跳检测
-        public bool WallJumpCheck(int dir)
-        {
-            return ClimbBoundsCheck(dir) && CollideCheck(Position, Vector2.right * dir, Constants.WallJumpCheckDist);
-        }
-
-        public RaycastHit2D ClimbHopSolid { get; set; }
-        public RaycastHit2D CollideClimbHop(int dir)
-        {
-            Vector2 origion = Position + collider.position;
-            RaycastHit2D hit = Physics2D.BoxCast(Position, collider.size, 0, Vector2.right * dir, DEVIATION, GroundMask);
-            return hit;
-            //if (hit && hit.normal.x == -dir)
-            //{
-
-            //}
         }
 
         public bool SlipCheck(float addY = 0)
@@ -312,52 +273,5 @@ namespace Myd.Platform
             }
             return false;
         }
-
-        //攀爬时，向上吸附
-        public bool ClimbUpSnap()
-        {
-            for (int i = 1; i <= Constants.ClimbUpCheckDist; i++)
-            {
-                //检测上方是否存在可以攀爬的墙壁，如果存在则瞬移i个像素
-                float yOffset = i * 0.1f;
-                if (!CollideCheck(Position, Vector2.up, yOffset) && ClimbCheck((int)Facing, yOffset + DEVIATION))
-                {
-                    Position += Vector2.up * yOffset;
-                    Debug.Log("======Climb Correct");
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //攀爬水平方向上的吸附
-        public void ClimbSnap()
-        {
-            Vector2 origion = Position + collider.position;
-            Vector2 dir = Vector2.right * (int)Facing;
-            RaycastHit2D hit = Physics2D.BoxCast(origion, collider.size, 0, dir, Constants.ClimbCheckDist*0.1f + DEVIATION, GroundMask);
-            if (hit)
-            {
-                //如果发生碰撞,则移动距离
-                Position += dir * Mathf.Max((hit.distance - DEVIATION), 0);
-            }
-            //for (int i = 0; i < Constants.ClimbCheckDist; i++)
-            //{
-            //    Vector2 dir = Vector2.right * (int)ctx.Facing;
-            //    if (!ctx.CollideCheck(ctx.Position, dir))
-            //    {
-            //        ctx.AdjustPosition(dir * 0.1f);
-            //    }
-            //    else
-            //    {
-            //        break;
-            //    }
-            //}
-        }
-
-        //public void MoveExactY(float distY)
-        //{
-        //    CorrectY(distY);
-        //}
     }
 }

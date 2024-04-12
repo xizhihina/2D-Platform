@@ -27,37 +27,11 @@ namespace Myd.Platform
 
         public override void OnEnd()
         {
-            ctx.WallBoost?.ResetTime();
-            ctx.WallSpeedRetentionTimer = 0;
             ctx.HopWaitX = 0;
         }
 
         public override EActionState Update(float deltaTime)
         {
-            //Climb
-            if (GameInput.Grab.Checked() && !ctx.Ducking)
-            {
-                //Climbing
-                if (ctx.Speed.y <= 0 && Math.Sign(ctx.Speed.x) != -(int)ctx.Facing)
-                {
-                    if (ctx.ClimbCheck((int)ctx.Facing))
-                    {
-                        ctx.Ducking = false;
-                        return EActionState.Climb;
-                    }
-                    //非下坠情况，需要考虑向上攀爬吸附
-                    if (ctx.MoveY > -1)
-                    {
-                        bool snapped = ctx.ClimbUpSnap();
-                        if (snapped)
-                        {
-                            ctx.Ducking = false;
-                            return EActionState.Climb;
-                        }
-                    }
-                }
-            }
-
             //Dashing
             if (ctx.CanDash)
             {
@@ -129,29 +103,6 @@ namespace Myd.Platform
                 if (!ctx.OnGround)
                 {
                     float max = ctx.MaxFall;//最大下落速度
-                    //Wall Slide
-                    if ((ctx.MoveX == (int)ctx.Facing || (ctx.MoveX == 0 && GameInput.Grab.Checked())) && ctx.MoveY != -1)
-                    {
-                        //判断是否向下做Wall滑行
-                        if (ctx.Speed.y <= 0 && ctx.WallSlideTimer > 0 && ctx.ClimbBoundsCheck((int)ctx.Facing) && ctx.CollideCheck(ctx.Position, Vector2.right * (int)ctx.Facing) && ctx.CanUnDuck)
-                        {
-                            ctx.Ducking = false;
-                            ctx.WallSlideDir = (int)ctx.Facing;
-                        }
-
-                        if (ctx.WallSlideDir != 0)
-                        {
-                            //if (ctx.WallSlideTimer > Constants.WallSlideTime * 0.5f && ClimbBlocker.Check(level, this, Position + Vector2.UnitX * wallSlideDir))
-                            //    ctx.WallSlideTimer = Constants.WallSlideTime * .5f;
-
-                            max = Mathf.Lerp(Constants.MaxFall, Constants.WallSlideStartMax, ctx.WallSlideTimer / Constants.WallSlideTime);
-                            if ((ctx.WallSlideTimer / Constants.WallSlideTime) > .65f)
-                            {
-                                //播放滑行特效
-                                ctx.PlayWallSlideEffect(Vector2.right * ctx.WallSlideDir);
-                            }
-                        }
-                    }
 
                     float mult = (Math.Abs(ctx.Speed.y) < Constants.HalfGravThreshold && (GameInput.Jump.Checked())) ? .5f : 1f;
                     //空中的情况,需要计算Y轴速度
@@ -177,25 +128,6 @@ namespace Myd.Platform
                 if (ctx.JumpCheck.AllowJump())
                 {
                     ctx.Jump();
-                }
-                else if (ctx.CanUnDuck)
-                {
-                    //如果右侧有墙
-                    if (ctx.WallJumpCheck(1))
-                    {
-                        if (ctx.Facing == Facings.Right && GameInput.Grab.Checked())
-                            ctx.ClimbJump();
-                        else
-                            ctx.WallJump(-1);
-                    }
-                    //如果左侧有墙
-                    else if (ctx.WallJumpCheck(-1))
-                    {
-                        if (ctx.Facing == Facings.Left && GameInput.Grab.Checked())
-                            ctx.ClimbJump();
-                        else
-                            ctx.WallJump(1);
-                    }
                 }
             }
 

@@ -30,27 +30,6 @@
         public static float JumpHBoost = 4f; //退离墙壁的力
         public static float JumpGraceTime = 0.1f;//土狼时间
 
-        #region WallJump
-        public static float WallJumpCheckDist = 0.3f;
-        public static float WallJumpForceTime = .16f; //墙上跳跃强制时间
-        public static float WallJumpHSpeed = MaxRun + JumpHBoost;
-
-        #endregion
-
-        #region SuperWallJump
-        public static float SuperJumpSpeed = JumpSpeed;
-        public static float SuperJumpH = 26f;
-        public static float SuperWallJumpSpeed = 16f;
-        public static float SuperWallJumpVarTime = .25f;
-        public static float SuperWallJumpForceTime = .2f;
-        public static float SuperWallJumpH = MaxRun + JumpHBoost* 2;
-        #endregion
-        #region WallSlide
-        public static float WallSpeedRetentionTime = .06f; //撞墙以后可以允许的保持速度的时间
-        public static float WallSlideTime = 1.2f; //墙壁滑行时间
-        public static float WallSlideStartMax = -2f;
-        #endregion
-
         #region Dash相关参数
         public static float DashSpeed = 24f;           //冲刺速度
         public static float EndDashSpeed = 16f;        //结束冲刺速度
@@ -63,27 +42,6 @@
         public static int DashVFloorSnapDist = 3;       //DashAttacking下的地面吸附像素值
         public static float DashAttackTime = .3f;       //
         public static int MaxDashes = 1;
-        #endregion
-
-        #region Climb参数
-        public static float ClimbMaxStamina = 110;       //最大耐力
-        public static float ClimbUpCost = 100 / 2.2f;   //向上爬得耐力消耗
-        public static float ClimbStillCost = 100 / 10f; //爬着不动耐力消耗
-        public static float ClimbJumpCost = 110 / 4f;   //爬着跳跃耐力消耗
-        public static int ClimbCheckDist = 2;           //攀爬检查像素值
-        public static int ClimbUpCheckDist = 2;         //向上攀爬检查像素值
-        public static float ClimbNoMoveTime = .1f;
-        public static float ClimbTiredThreshold = 20f;  //表现疲惫的阈值
-        public static float ClimbUpSpeed = 4.5f;        //上爬速度
-        public static float ClimbDownSpeed = -8f;       //下爬速度
-        public static float ClimbSlipSpeed = -3f;       //下滑速度
-        public static float ClimbAccel = 90f;           //下滑加速度
-        public static float ClimbGrabYMulti = .2f;       //攀爬时抓取导致的Y轴速度衰减
-        public static float ClimbHopY = 12f;            //Hop的Y轴速度
-        public static float ClimbHopX = 10f;            //Hop的X轴速度
-        public static float ClimbHopForceTime = .2f;    //Hop时间
-        public static float ClimbJumpBoostTime = .2f;   //WallBoost时间
-        public static float ClimbHopNoWindTime = .3f;   //Wind情况下,Hop会无风0.3秒
         #endregion
 
         #region Duck参数

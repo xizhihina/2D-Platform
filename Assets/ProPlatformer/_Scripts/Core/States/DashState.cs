@@ -19,7 +19,6 @@ namespace Myd.Platform
             //冻帧
             ctx.EffectControl.Freeze(0.05f);
 
-            ctx.WallSlideTimer = Constants.WallSlideTime;
             ctx.DashCooldownTimer = Constants.DashCooldown;
             ctx.DashRefillCooldownTimer = Constants.DashRefillCooldown;
             beforeDashSpeed = ctx.Speed;
@@ -52,45 +51,7 @@ namespace Myd.Platform
                 //Super Jump
                 if (ctx.CanUnDuck && GameInput.Jump.Pressed() && ctx.JumpCheck.AllowJump())
                 {
-                    ctx.SuperJump();
                     return EActionState.Normal;
-                }
-            }
-            //Super Wall Jump
-            if (DashDir.x == 0 && DashDir.y == 1)
-            {
-                //向上Dash情况下，检测SuperWallJump
-                if (GameInput.Jump.Pressed() && ctx.CanUnDuck)
-                {
-                    if (ctx.WallJumpCheck(1))
-                    {
-                        ctx.SuperWallJump(-1);
-                        return EActionState.Normal;
-                    }
-
-                    if (ctx.WallJumpCheck(-1))
-                    {
-                        ctx.SuperWallJump(1);
-                        return EActionState.Normal;
-                    }
-                }
-            }
-            else
-            {
-                //Dash状态下执行WallJump，并切换到Normal状态
-                if (GameInput.Jump.Pressed() && ctx.CanUnDuck)
-                {
-                    if (ctx.WallJumpCheck(1))
-                    {
-                        ctx.WallJump(-1);
-                        return EActionState.Normal;
-                    }
-
-                    if (ctx.WallJumpCheck(-1))
-                    {
-                        ctx.WallJump(1);
-                        return EActionState.Normal;
-                    }
                 }
             }
             return state;

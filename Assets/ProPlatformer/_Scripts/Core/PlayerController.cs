@@ -37,10 +37,7 @@ namespace Myd.Platform
 
         public bool launched;
         public float launchedTimer;
-        public float WallSlideTimer { get; set; } = Constants.WallSlideTime;
-        public int WallSlideDir { get; set; }
         public JumpCheck JumpCheck { get; set; }    //土狼时间
-        public WallBoost WallBoost { get; set; }    //WallBoost
         private FiniteStateMachine<BaseActionState> stateMachine;
 
         public PlayerRenderer SpriteControl { get; private set; }
@@ -55,7 +52,6 @@ namespace Myd.Platform
             stateMachine = new FiniteStateMachine<BaseActionState>((int)EActionState.Size);
             stateMachine.AddState(new NormalState(this));
             stateMachine.AddState(new DashState(this));
-            stateMachine.AddState(new ClimbState(this));
             GroundMask = LayerMask.GetMask("Ground");
 
             Facing  = Facings.Right;
@@ -64,17 +60,7 @@ namespace Myd.Platform
 
         public void RefreshAbility()
         {
-
             JumpCheck = new JumpCheck(this, Constants.EnableJumpGrace);
-
-            if (!Constants.EnableWallBoost)
-            {
-                WallBoost = null;
-            }
-            else
-            {
-                WallBoost = WallBoost == null ? new WallBoost(this) : WallBoost;
-            }
         }
 
         public void Init(Bounds bounds, Vector2 startPosition)
@@ -115,19 +101,6 @@ namespace Myd.Platform
                 {
                     onGround = false;
                 }
-
-                //Wall Slide
-                if (WallSlideDir != 0)
-                {
-                    WallSlideTimer = Math.Max(WallSlideTimer - deltaTime, 0);
-                    WallSlideDir = 0;
-                }
-                if (onGround && stateMachine.State != (int)EActionState.Climb)
-                {
-                    WallSlideTimer = Constants.WallSlideTime;
-                }
-                //Wall Boost, 不消耗体力WallJump
-                WallBoost?.Update(deltaTime);
                 
                 //跳跃检查
                 JumpCheck?.Update(deltaTime);
@@ -241,8 +214,6 @@ namespace Myd.Platform
         {
             GameInput.Jump.ConsumeBuffer();
             JumpCheck?.ResetTime();
-            WallSlideTimer = Constants.WallSlideTime;
-            WallBoost?.ResetTime();
             varJumpTimer = Constants.VarJumpTime;
             Speed.x += Constants.JumpHBoost * moveX;
             Speed.y = Constants.JumpSpeed;
@@ -251,93 +222,14 @@ namespace Myd.Platform
             
             PlayJumpEffect(SpritePosition, Vector2.up);
         }
-
-        //SuperJump，表示在地面上或者土狼时间内，Dash接跳跃。
-        //数值方便和Jump类似，数值变大。
-        //蹲伏状态的SuperJump需要额外处理。
-        //Dash->Jump->Dush
-        public void SuperJump()
-        {
-            GameInput.Jump.ConsumeBuffer();
-            JumpCheck?.ResetTime();
-            varJumpTimer = Constants.VarJumpTime;
-            WallSlideTimer = Constants.WallSlideTime;
-            WallBoost?.ResetTime();
-
-            Speed.x = Constants.SuperJumpH * (int)Facing;
-            Speed.y = Constants.JumpSpeed;
-            //Speed += LiftBoost;
-            if (Ducking)
-            {
-                Ducking = false;
-                Speed.x *= Constants.DuckSuperJumpXMulti;
-                Speed.y *= Constants.DuckSuperJumpYMulti;
-            }
-
-            varJumpSpeed = Speed.y;
-            //TODO 
-            launched = true;
-
-            PlayJumpEffect(SpritePosition, Vector2.up);
-        }
-
+        
         //在墙边情况下的，跳跃。主要需要考虑当前跳跃朝向
-        public void WallJump(int dir)
-        {
-            GameInput.Jump.ConsumeBuffer();
-            Ducking = false;
-            JumpCheck?.ResetTime();
-            varJumpTimer = Constants.VarJumpTime;
-            WallSlideTimer = Constants.WallSlideTime;
-            WallBoost?.ResetTime();
-            if (moveX != 0)
-            {
-                ForceMoveX = dir;
-                ForceMoveXTimer = Constants.WallJumpForceTime;
-            }
-
-            Speed.x = Constants.WallJumpHSpeed * dir;
-            Speed.y = Constants.JumpSpeed;
-            //TODO 考虑电梯对速度的加成
-            //Speed += LiftBoost;
-            varJumpSpeed = Speed.y;
-
-            //墙壁粒子效果。
-            if (dir == -1)
-                PlayJumpEffect(RightPosition, Vector2.left);
-            else
-                PlayJumpEffect(LeftPosition, Vector2.right);
-            
-        }
 
         public void ClimbJump()
         {
             Jump();
-            WallBoost?.Active();
         }
-
-        //在墙边Dash时，当前按住上，不按左右时，执行SuperWallJump
-        public void SuperWallJump(int dir)
-        {
-            GameInput.Jump.ConsumeBuffer();
-            Ducking = false;
-            JumpCheck?.ResetTime();
-            varJumpTimer = Constants.SuperWallJumpVarTime;
-            WallSlideTimer = Constants.WallSlideTime;
-            WallBoost?.ResetTime();
-
-            Speed.x = Constants.SuperWallJumpH * dir;
-            Speed.y = Constants.SuperWallJumpSpeed;
-            //Speed += LiftBoost;
-            varJumpSpeed = Speed.y;
-            launched = true;
-
-            if (dir == -1)
-                PlayJumpEffect(RightPosition, Vector2.left);
-            else
-                PlayJumpEffect(LeftPosition, Vector2.right);
-        }
-
+        
         public bool RefillDash()
         {
             if (dashes < Constants.MaxDashes)
@@ -348,17 +240,10 @@ namespace Myd.Platform
 
             return false;
         }
-
-        
         
 
         public bool CanDash => GameInput.Dash.Pressed() && dashCooldownTimer <= 0 && dashes > 0;
 
-        public float WallSpeedRetentionTimer
-        {
-            get => wallSpeedRetentionTimer;
-            set => wallSpeedRetentionTimer = value;
-        }
         public Vector2 Speed;
 
         public object Holding => null;

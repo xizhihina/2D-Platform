@@ -147,24 +147,6 @@ namespace Myd.Platform
             Constants.DashCornerCorrection = DashCornerCorrection;     //水平Dash时，遇到阻挡物的可纠正像素值
             Constants.MaxDashes = MaxDashes;    // 最大Dash次数
 
-            Constants.ClimbCheckDist = ClimbCheckDist;           //攀爬检查像素值
-            Constants.ClimbUpCheckDist = ClimbUpCheckDist;         //向上攀爬检查像素值
-            Constants.ClimbNoMoveTime = ClimbNoMoveTime;
-            Constants.ClimbUpSpeed = ClimbUpSpeed;        //上爬速度
-            Constants.ClimbDownSpeed = ClimbDownSpeed;       //下爬速度
-            Constants.ClimbSlipSpeed = ClimbSlipSpeed;       //下滑速度
-            Constants.ClimbAccel = ClimbAccel;          //下滑加速度
-            Constants.ClimbGrabYMulti = ClimbGrabYMulti;       //攀爬时抓取导致的Y轴速度衰减
-            Constants.ClimbHopY = ClimbHopY;          //Hop的Y轴速度 
-            Constants.ClimbHopX = ClimbHopX;           //Hop的X轴速度
-            Constants.ClimbHopForceTime = ClimbHopForceTime;    //Hop时间
-            Constants.ClimbJumpBoostTime = ClimbJumpBoostTime;   //WallBoost时间
-            Constants.ClimbHopNoWindTime = ClimbHopNoWindTime;   //Wind情况下,Hop会无风0.3秒
-
-            Constants.WallJumpHSpeed = MaxRun + JumpHBoost;
-            Constants.SuperJumpSpeed = JumpSpeed;
-            Constants.SuperWallJumpH = MaxRun + JumpHBoost * 2;
-
             Constants.DashCornerCorrection = DashCornerCorrection;
 
             Constants.DuckFriction = DuckFriction;
