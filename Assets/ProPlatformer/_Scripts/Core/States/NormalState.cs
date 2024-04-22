@@ -38,33 +38,6 @@ namespace Myd.Platform
                 return ctx.Dash();
             }
 
-            //Ducking
-            if (ctx.Ducking)
-            {
-                if (ctx.OnGround && ctx.MoveY != -1)
-                {
-                    if (ctx.CanUnDuck)
-                    {
-                        ctx.Ducking = false;
-                    }
-                    else if (ctx.Speed.x == 0)
-                    {
-                        //根据角落位置，进行挤出操作
-                    }
-                }
-            }
-            else if (ctx.OnGround && ctx.MoveY == -1 && ctx.Speed.y <= 0)
-            {
-                ctx.Ducking = true;
-                ctx.PlayDuck(true);
-            }
-
-            //水平面上移动,计算阻力
-            if (ctx.Ducking && ctx.OnGround)
-            {
-                ctx.Speed.x = Mathf.MoveTowards(ctx.Speed.x, 0, Constants.DuckFriction * deltaTime);
-            }
-            else
             {
                 float mult = ctx.OnGround ? 1 : Constants.AirMulti;
                 //计算水平速度

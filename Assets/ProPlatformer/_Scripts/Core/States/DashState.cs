@@ -44,16 +44,6 @@ namespace Myd.Platform
                 if (ctx.DashTrailTimer <= 0)
                     ctx.PlayTrailEffect((int)ctx.Facing);
             }
-            //Grab Holdables
-            //Super Jump
-            if (DashDir.y == 0)
-            {
-                //Super Jump
-                if (ctx.CanUnDuck && GameInput.Jump.Pressed() && ctx.JumpCheck.AllowJump())
-                {
-                    return EActionState.Normal;
-                }
-            }
             return state;
         }
 

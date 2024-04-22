@@ -280,52 +280,7 @@ namespace Myd.Platform
         {
             stateMachine.State = state;
         }
-
-        public bool Ducking
-        {
-            get => collider == duckHitBox;
-            set
-            {
-                if (value)
-                {
-                    collider = duckHitBox;
-                    return;
-                }
-
-                collider = normalHitBox;
-                PlayDuck(value);
-            }
-        }
-
-        //检测当前是否可以站立
-        public bool CanUnDuck
-        {
-            get
-            {
-                if (!Ducking)
-                    return true;
-                Rect lastCollider = collider;
-                collider = normalHitBox;
-                bool noCollide = !CollideCheck(Position, Vector2.zero);
-                collider = lastCollider;
-                return noCollide;
-            }
-        }
-
-        public bool DuckFreeAt(Vector2 at)
-        {
-            Vector2 oldP = Position;
-            Rect oldC = collider;
-            Position = at;
-            collider = duckHitBox;
-
-            bool ret = !CollideCheck(Position, Vector2.zero);
-
-            Position = oldP;
-            collider = oldC;
-
-            return ret;
-        }
+        
     }
 
 }
