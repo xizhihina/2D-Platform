@@ -14,15 +14,19 @@ namespace Myd.Platform
         const float DEVIATION = 0.02f;  //碰撞检测误差
 
         private readonly Rect normalHitBox = new(0, -0.25f, 0.8f, 1.1f);
-        private readonly Rect duckHitBox = new(0, -0.5f, 0.8f, 0.6f);
 
         private Rect collider;
 
 
         //碰撞检测
-        public bool CollideCheck(Vector2 position, Vector2 dir, float dist = 0)
+        public Collider2D CollideCheck(Vector2 position, Vector2 dir, float dist = 0)
         {
             Vector2 origin = position + collider.position;
+            // 如果当前检测位置有物体，直接返回当前检测位置的物体，之后再考虑误差（保证电梯场景下能检测到电梯）
+            if (Physics2D.OverlapBox(origin + dir * dist, collider.size, 0, GroundMask))
+            {
+                return Physics2D.OverlapBox(origin + dir * dist, collider.size, 0, GroundMask);
+            }
             //返回Collider2D 与该盒体重叠的碰撞体。GroundMask="Ground"
             return Physics2D.OverlapBox(origin + dir * (dist + DEVIATION), collider.size, 0, GroundMask);
         }
@@ -111,29 +115,6 @@ namespace Myd.Platform
             return false;
         }
 
-        public bool SlipCheck(float addY = 0)
-        {
-            int direct = Facing == Facings.Right ? 1 : -1;
-            Vector2 origin = Position + collider.position + Vector2.up * collider.size.y / 2f + Vector2.right * direct * (collider.size.x / 2f + STEP);
-            Vector2 point1 = origin + Vector2.up * (-0.4f + addY);
-
-            if(Physics2D.OverlapPoint(point1, GroundMask))
-            {
-                return false;
-            }
-            Vector2 point2 = origin + Vector2.up * (0.4f + addY);
-            if (Physics2D.OverlapPoint(point2, GroundMask))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public bool ClimbHopBlockedCheck()
-        {
-            return false;
-        }
-
         //单步移动，参数和返回值都带方向，表示Y轴
         private float MoveYStepWithCollide(float distY)
         {
@@ -178,12 +159,6 @@ namespace Myd.Platform
 
             if ((stateMachine.State == (int)EActionState.Dash))
             {
-                if (onGround && DuckFreeAt(Position + Vector2.right * distX))
-                {
-                    Ducking = true;
-                    return true;
-                }
-
                 if (Speed.y == 0 && Speed.x!=0)
                 {
                     for (int i = 1; i <= Constants.DashCornerCorrection; i++)

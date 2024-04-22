@@ -250,7 +250,7 @@ namespace Myd.Platform
 
         public bool OnGround => onGround;
 
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; set; }
         //表示进入爬墙状态有0.1秒时间,不发生移动，为了让玩家看清发生了爬墙的动作
         public float ClimbNoMoveTimer { get; set; }
         public float VarJumpSpeed => varJumpSpeed;
