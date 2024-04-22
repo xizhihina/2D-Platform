@@ -6,15 +6,16 @@ namespace Myd.Platform
 {
     public class ElevatorController : MonoBehaviour
     {
-        public float Speed;
-        public float TopY, BottomY;
+        public float Speed=1f;
+        private float TopY, BottomY;
+        public float upHeight=3f;
 
         private bool isUp = true;
 
         // Start is called before the first frame update
         void Start()
         {
-            TopY = transform.position.y + 3f; //获取top点
+            TopY = transform.position.y + upHeight; //获取top点
             BottomY = transform.position.y; //获取bottom点
         }
 
