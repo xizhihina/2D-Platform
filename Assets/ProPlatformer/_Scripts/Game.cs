@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Myd.Platform
 {
@@ -44,9 +46,19 @@ namespace Myd.Platform
             Player.Instance.Reload(level.Bounds, level.StartPosition);
             gameState = EGameState.Play;
             
-            //设置倒计时
-            GameUIManager.Instance.timeCountDown=60f;
+            //设置监听消息
+            YTEventManager.Instance.AddEventListener(EventStrings.GAME_OVER, GameOver);
+            YTEventManager.Instance.AddEventListener(EventStrings.TIME_PAUSE, TimePause);
+            YTEventManager.Instance.AddEventListener(EventStrings.TIME_CONTINUE, TimeContinue);
+            
             yield return null;
+        }
+
+        private void OnDestroy()
+        {
+            YTEventManager.Instance.RemoveEventListener(EventStrings.GAME_OVER, GameOver);
+            YTEventManager.Instance.RemoveEventListener(EventStrings.TIME_PAUSE, TimePause);
+            YTEventManager.Instance.RemoveEventListener(EventStrings.TIME_CONTINUE, TimeContinue);
         }
 
         public void Update()
@@ -103,6 +115,24 @@ namespace Myd.Platform
         public void CameraShake(Vector2 dir, float duration)
         {
             gameCamera.Shake(dir, duration);
+        }
+        
+        public void Pause()
+        {
+            gameState = EGameState.Pause;
+        }
+        public void GameOver()
+        {
+            gameState = EGameState.Fail;
+        }
+
+        public void TimePause()
+        {
+            gameState = EGameState.Pause;
+        }
+        public void TimeContinue()
+        {
+            gameState = EGameState.Play;
         }
     }
 

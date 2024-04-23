@@ -100,7 +100,7 @@ public class YTEventManager : Singleton<YTEventManager>
     /// </summary>
     /// <param name="event_type">事件名称</param>
     /// <param name="action"></param>
-    public void RemovEventListener(string event_type, UnityAction action)
+    public void RemoveEventListener(string event_type, UnityAction action)
     {
         if (CheckRemovingEvent(event_type, action) == true)
         {
@@ -108,7 +108,7 @@ public class YTEventManager : Singleton<YTEventManager>
             OnListenerRemoved(event_type);
         }
     }
-    public void RemovEventListener<T>(string event_type, UnityAction<T> action)
+    public void RemoveEventListener<T>(string event_type, UnityAction<T> action)
     {
         if (CheckRemovingEvent(event_type, action) == true)
         {
@@ -116,7 +116,7 @@ public class YTEventManager : Singleton<YTEventManager>
             OnListenerRemoved(event_type);
         }
     }
-    public void RemovEventListener<T, Y>(string event_type, UnityAction<T, Y> action)
+    public void RemoveEventListener<T, Y>(string event_type, UnityAction<T, Y> action)
     {
         if (CheckRemovingEvent(event_type, action) == true)
         {
@@ -124,7 +124,7 @@ public class YTEventManager : Singleton<YTEventManager>
             OnListenerRemoved(event_type);
         }
     }
-    public void RemovEventListener<T, Y, U>(string event_type, UnityAction<T, Y, U> action)
+    public void RemoveEventListener<T, Y, U>(string event_type, UnityAction<T, Y, U> action)
     {
         if (CheckRemovingEvent(event_type, action) == true)
         {
@@ -138,19 +138,19 @@ public class YTEventManager : Singleton<YTEventManager>
     /// <param name="event_type">事件名称</param>
     public void TriggerEvent(string event_type)
     {
-        if (_eventDic.TryGetValue(event_type, out Delegate targetdelegate))
+        if (_eventDic.TryGetValue(event_type, out Delegate targetDelegate))
         {   //先判断是否有键
-            if (targetdelegate == null)//再判断是否有值(委托引用的方法)
+            if (targetDelegate == null)//再判断是否有值(委托引用的方法)
             {
                 return;
             }
 
-            if (targetdelegate.GetType() != typeof(UnityAction))
+            if (targetDelegate.GetType() != typeof(UnityAction))
             {
                 throw new Exception($"TriggerEvent {event_type} error : type sof parameters are not match.");
             }//防止类型错误
 
-            UnityAction action = (UnityAction)targetdelegate;//为什么要用UnityAction装Delegate：自带多播方法，能直接传委托链
+            UnityAction action = (UnityAction)targetDelegate;//为什么要用UnityAction装Delegate：自带多播方法，能直接传委托链
             try
             {
                 action();
@@ -163,19 +163,19 @@ public class YTEventManager : Singleton<YTEventManager>
     }
     public void TriggerEvent<T>(string event_type, T t)
     {
-        if (_eventDic.TryGetValue(event_type, out Delegate targetdelegate))
+        if (_eventDic.TryGetValue(event_type, out Delegate targetDelegate))
         {
-            if (targetdelegate == null)
+            if (targetDelegate == null)
             {
                 return;
             }
 
-            if (targetdelegate.GetType() != typeof(UnityAction<T>))
+            if (targetDelegate.GetType() != typeof(UnityAction<T>))
             {
                 throw new Exception($"TriggerEvent {event_type} error : type sof parameters are not match.");
             }
 
-            UnityAction<T> action = (UnityAction<T>)targetdelegate;
+            UnityAction<T> action = (UnityAction<T>)targetDelegate;
 
             try
             {
@@ -189,19 +189,19 @@ public class YTEventManager : Singleton<YTEventManager>
     }
     public void TriggerEvent<T, Y>(string event_type, T t, Y y)
     {
-        if (_eventDic.TryGetValue(event_type, out Delegate targetdelegate))
+        if (_eventDic.TryGetValue(event_type, out Delegate targetDelegate))
         {
-            if (targetdelegate == null)
+            if (targetDelegate == null)
             {
                 return;
             }
 
-            if (targetdelegate.GetType() != typeof(UnityAction<T, Y>))
+            if (targetDelegate.GetType() != typeof(UnityAction<T, Y>))
             {
                 throw new Exception($"TriggerEvent {event_type} error : type sof parameters are not match.");
             }
 
-            UnityAction<T, Y> action = (UnityAction<T, Y>)targetdelegate;
+            UnityAction<T, Y> action = (UnityAction<T, Y>)targetDelegate;
 
             try
             {
@@ -215,19 +215,19 @@ public class YTEventManager : Singleton<YTEventManager>
     }
     public void TriggerEvent<T, Y, U>(string event_type, T t, Y y, U u)
     {
-        if (_eventDic.TryGetValue(event_type, out Delegate targetdelegate))
+        if (_eventDic.TryGetValue(event_type, out Delegate targetDelegate))
         {
-            if (targetdelegate == null)
+            if (targetDelegate == null)
             {
                 return;
             }
 
-            if (targetdelegate.GetType() != typeof(UnityAction<T, Y, U>))
+            if (targetDelegate.GetType() != typeof(UnityAction<T, Y, U>))
             {
                 throw new Exception($"TriggerEvent {event_type} error : type sof parameters are not match.");
             }
 
-            UnityAction<T, Y, U> action = (UnityAction<T, Y, U>)targetdelegate;
+            UnityAction<T, Y, U> action = (UnityAction<T, Y, U>)targetDelegate;
 
             try
             {

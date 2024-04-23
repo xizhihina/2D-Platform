@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,18 +8,30 @@ namespace Myd.Platform
 {
     public class GameUIManager : UnitySingleton<GameUIManager>
     {
+        private void Start()
+        {
+            timeCountDown=timeMax;
+            
+            YTEventManager.Instance.AddEventListener(EventStrings.GAME_OVER, GameOver);
+        }
+
+        private void OnDestroy()
+        {
+            YTEventManager.Instance.RemoveEventListener(EventStrings.GAME_OVER, GameOver);
+        }
+
         public GameObject pausePanel;
         public GameObject settingsPanel;
 
-        public void PauseGame()
+        public void TimePause()
         {
-            Time.timeScale = 0;
+            YTEventManager.Instance.TriggerEvent(EventStrings.TIME_PAUSE);
             pausePanel.SetActive(true);
         }
 
-        public void ResumeGame()
+        public void TimeContinue()
         {
-            Time.timeScale = 1;
+            YTEventManager.Instance.TriggerEvent(EventStrings.TIME_CONTINUE);
             pausePanel.SetActive(false);
         }
 
@@ -40,6 +53,7 @@ namespace Myd.Platform
 
 
         // 倒计时
+        public int timeMax=10;
         public RectTransform timeCountDownMask;
         public Text timeCountDownText;
         private float _timeCountDown;
@@ -51,8 +65,24 @@ namespace Myd.Platform
             {
                 _timeCountDown = value;
                 timeCountDownText.text = ((int)_timeCountDown).ToString();
-                timeCountDownMask.sizeDelta= new Vector2(1300*_timeCountDown/60, 30);
+                //如果改变了倒计时UI大小，这里要跟着改
+                timeCountDownMask.sizeDelta= new Vector2(1300*_timeCountDown/timeMax, 30);
+                if (_timeCountDown<0f)
+                {
+                    YTEventManager.Instance.TriggerEvent(EventStrings.GAME_OVER);
+                }
             }
+        }
+        
+        //游戏结束
+        public GameObject gameOverPanel;
+        public void GameOver()
+        {
+            gameOverPanel.SetActive(true);
+        }
+        public void GameRestart()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         }
     }
 }
