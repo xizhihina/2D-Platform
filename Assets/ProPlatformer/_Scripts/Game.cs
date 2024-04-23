@@ -43,6 +43,9 @@ namespace Myd.Platform
             //加载玩家
             Player.Instance.Reload(level.Bounds, level.StartPosition);
             gameState = EGameState.Play;
+            
+            //设置倒计时
+            GameUIManager.Instance.timeCountDown=60f;
             yield return null;
         }
 
@@ -59,6 +62,8 @@ namespace Myd.Platform
                     Player.Instance.Update(deltaTime);
                     //更新摄像机
                     // gameCamera.SetCameraPosition(player.GetCameraPosition());
+                    //倒计时减少
+                    GameUIManager.Instance.timeCountDown -= deltaTime;
                 }
             }
         }

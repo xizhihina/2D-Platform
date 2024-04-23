@@ -2812,7 +2812,7 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 20, y: 0, z: 20, w: 0}
     rect:
       serializedVersion: 2
       x: 1856
@@ -2833,11 +2833,11 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 20, y: 0, z: 20, w: 0}
     rect:
       serializedVersion: 2
       x: 2164
-      y: 1812
+      y: 1814
       width: 300
       height: 40
     spriteID: e9c8864dd79b33642b476383e26a0b48
@@ -2854,7 +2854,7 @@ ScriptedImporter:
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 20, y: 0, z: 20, w: 0}
     rect:
       serializedVersion: 2
       x: 4
@@ -2879,7 +2879,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 2472
-      y: 1812
+      y: 1816
       width: 300
       height: 40
     spriteID: 56633f895703a994ea8fe621cd3dcafd

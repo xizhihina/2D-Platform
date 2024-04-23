@@ -17,7 +17,8 @@ namespace Myd.Platform
         //加载玩家实体
         public void Reload(Bounds bounds, Vector2 startPosition)
         {
-            playerRenderer = Object.Instantiate(Resources.Load<PlayerRenderer>("PlayerRenderer"));
+            // playerRenderer = Object.Instantiate(Resources.Load<PlayerRenderer>("PlayerRenderer"));
+            playerRenderer=GameObject.Find("PlayerRenderer").GetComponent<PlayerRenderer>();
             //初始化
             playerController = new PlayerController(playerRenderer, Game.Instance.sceneEffectManager);
             playerController.Init(bounds, startPosition);
